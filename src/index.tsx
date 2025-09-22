@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom/client';
 import { App, AppProps } from './App';
 
 const state: AppProps = {
+  auth: false,
   places: [
     {
       bookmark: false,
@@ -58,6 +59,6 @@ const root = ReactDOM.createRoot(
 
 root.render(
   <React.StrictMode>
-    <App {...state} />
+    <App auth={state.auth} places={state.places} />
   </React.StrictMode>
 );
