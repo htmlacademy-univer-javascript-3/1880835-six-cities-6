@@ -1,10 +1,10 @@
-import { Place } from './place/types';
+import { Offer } from './offer/types';
 import { Router } from './router';
 
 export interface AppProps {
   auth: boolean;
-  places: Place[];
+  offers: Offer[];
 }
-export function App({ places, auth }: AppProps) {
-  return <Router places={places} auth={auth} />;
+export function App({ auth, offers }: AppProps) {
+  return <Router offers={offers} auth={auth} />;
 }

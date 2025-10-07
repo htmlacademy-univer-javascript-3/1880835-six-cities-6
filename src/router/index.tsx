@@ -16,12 +16,12 @@ export function PrivateRoute({
   return access ? children : <Navigate to={'/login'} />;
 }
 
-export function Router({ places, auth }: AppProps) {
+export function Router({ offers, auth }: AppProps) {
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/login" element={<Login />} />
-        <Route path="/" element={<Main places={places} />} />
+        <Route path="/" element={<Main offers={offers} />} />
         <Route path="/offer/:id" element={<Offer />} />
         <Route
           path="/favorites"

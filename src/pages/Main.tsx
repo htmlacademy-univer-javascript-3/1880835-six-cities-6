@@ -1,7 +1,7 @@
-import { Place } from '../place/types';
-import { CardList } from '../place/components/CardList';
+import { Offer } from '../offer/types';
+import { CardList } from '../offer/components/CardList';
 
-export function Main({ places }: { places: Place[] }) {
+export function Main({ offers }: { offers: Offer[] }) {
   return (
     <div className="page page--gray page--main">
       <header className="header">
@@ -83,7 +83,7 @@ export function Main({ places }: { places: Place[] }) {
         </div>
         <div className="cities">
           <div className="cities__places-container container">
-            <CardList places={places} />
+            <CardList offers={offers} />
             <div className="cities__right-section">
               <section className="cities__map map"></section>
             </div>

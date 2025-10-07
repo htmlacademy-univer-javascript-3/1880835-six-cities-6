@@ -1,7 +1,7 @@
-import { Place } from '../types';
+import { Offer } from '../types';
 import { Card } from './Card';
 
-export function CardList({ places }: { places: Place[] }) {
+export function CardList({ offers }: { offers: Offer[] }) {
   return (
     <section className="cities__places places">
       <h2 className="visually-hidden">Places</h2>
@@ -30,7 +30,7 @@ export function CardList({ places }: { places: Place[] }) {
         </ul>
       </form>
       <div className="cities__places-list places__list tabs__content">
-        {places.map((p, i) => (
+        {offers.map((p, i) => (
           // eslint-disable-next-line react/no-array-index-key
           <Card {...p} key={i} />
         ))}

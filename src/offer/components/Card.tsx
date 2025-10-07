@@ -1,5 +1,5 @@
 import { capitalize } from '../../utils/string';
-import { Place } from '../types';
+import { Offer } from '../types';
 
 export function Card({
   bookmark,
@@ -9,7 +9,7 @@ export function Card({
   rating,
   name,
   type,
-}: Place) {
+}: Offer) {
   return (
     <article className="cities__card place-card">
       {premium && (
