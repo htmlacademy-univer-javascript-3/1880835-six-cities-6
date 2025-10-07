@@ -3,6 +3,7 @@ import { capitalize } from '../../utils/string';
 import { Offer, Rating } from '../types';
 import { classNames } from '../../utils/classNames';
 import { Link } from 'react-router-dom';
+import routes from '../../router/routes';
 
 function CardRating({ rating }: { rating: Rating }) {
   return (
@@ -44,16 +45,16 @@ function cardVariant(variant: CardVariant) {
 }
 
 interface CardProps {
-  to: string;
   offer: Offer;
   variant?: CardVariant;
+  onClick?: (event: MouseEvent<HTMLElement>) => void;
   onMouseEnter?: (event: MouseEvent<HTMLElement>) => void;
 }
 export function Card({
-  to,
   variant,
+  onClick,
   onMouseEnter,
-  offer: { bookmark, premium, imageSRC, price, rating, name, type },
+  offer: { id, bookmark, premium, imageSRC, price, rating, name, type },
 }: CardProps) {
   const variantInfo = useMemo(
     () => cardVariant(variant ?? 'cities'),
@@ -63,6 +64,7 @@ export function Card({
   return (
     <article
       className={classNames('place-card', variantInfo.article)}
+      onClick={onClick}
       onMouseEnter={onMouseEnter}
     >
       {premium && (
@@ -76,7 +78,7 @@ export function Card({
           'place-card__image-wrapper'
         )}
       >
-        <Link to={to}>
+        <Link to={routes.offer({ id })}>
           <img
             className="place-card__image"
             src={imageSRC}
@@ -111,7 +113,7 @@ export function Card({
         </div>
         <CardRating rating={rating} />
         <h2 className="place-card__name">
-          <Link to={to}>{name}</Link>
+          <Link to={routes.offer({ id })}>{name}</Link>
         </h2>
         <p className="place-card__type">{capitalize(type)}</p>
       </div>

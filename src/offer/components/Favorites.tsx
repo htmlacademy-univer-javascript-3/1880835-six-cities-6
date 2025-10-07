@@ -1,7 +1,6 @@
 import { useMemo } from 'react';
 import { Offer } from '../types';
 import { Card } from './Card';
-import routes from '../../router/routes';
 
 export function Favorites({ offers }: { offers: Offer[] }) {
   const citiesOffers = useMemo<Record<string, Offer[]>>(() => {
@@ -27,12 +26,7 @@ export function Favorites({ offers }: { offers: Offer[] }) {
             </div>
             <div className="favorites__places">
               {cityOffers.map((offer) => (
-                <Card
-                  key={offer.id}
-                  offer={offer}
-                  variant="favorites"
-                  to={routes.offer({ id: offer.id })}
-                />
+                <Card key={offer.id} offer={offer} variant="favorites" />
               ))}
             </div>
           </li>
