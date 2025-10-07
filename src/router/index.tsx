@@ -27,7 +27,7 @@ export function Router({ offers, auth }: AppProps) {
           path="/favorites"
           element={
             <PrivateRoute access={auth}>
-              <Favorites />
+              <Favorites offers={offers} />
             </PrivateRoute>
           }
         />

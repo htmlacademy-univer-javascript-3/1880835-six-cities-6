@@ -10,6 +10,7 @@ export default [
     rating: 1,
     name: 'Beautiful & luxurious apartment at great location',
     type: 'apartment',
+    city: 'Amsterdam',
   },
   {
     id: 1,
@@ -20,6 +21,7 @@ export default [
     rating: 4,
     name: 'Wood and stone place',
     type: 'room',
+    city: 'Amsterdam',
   },
   {
     id: 2,
@@ -30,6 +32,7 @@ export default [
     rating: 4,
     name: 'Canal View Prinsengracht',
     type: 'apartment',
+    city: 'Amsterdam',
   },
   {
     id: 3,
@@ -40,6 +43,7 @@ export default [
     rating: 5,
     name: 'Nice, cozy, warm big bed apartment',
     type: 'apartment',
+    city: 'Cologne',
   },
   {
     id: 4,
@@ -50,5 +54,6 @@ export default [
     rating: 4,
     name: 'Wood and stone place',
     type: 'room',
+    city: 'Cologne',
   },
 ] as const satisfies Offer[];

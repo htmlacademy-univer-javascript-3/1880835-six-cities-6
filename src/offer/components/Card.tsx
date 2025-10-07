@@ -1,34 +1,89 @@
-import { MouseEvent } from 'react';
+import { MouseEvent, useMemo } from 'react';
 import { capitalize } from '../../utils/string';
-import { Offer } from '../types';
+import { Offer, Rating } from '../types';
+import { classNames } from '../../utils/classNames';
+
+function CardRating({ rating }: { rating: Rating }) {
+  return (
+    <div className="place-card__rating rating">
+      <div className="place-card__stars rating__stars">
+        <span style={{ width: `${rating * 20}%` }}></span>
+        <span className="visually-hidden">Rating</span>
+      </div>
+    </div>
+  );
+}
+
+type CardVariant = 'cities' | 'favorites';
+function cardVariant(variant: CardVariant) {
+  switch (variant) {
+    case 'cities':
+      return {
+        article: 'cities__card',
+        imageWrapper: 'cities__image-wrapper',
+        cardInfo: '',
+        image: {
+          width: 260,
+          height: 200,
+        },
+      };
+    case 'favorites':
+      return {
+        article: 'favorites__card',
+        imageWrapper: 'favorites__image-wrapper',
+        cardInfo: 'favorites__card-info',
+        image: {
+          width: 150,
+          height: 110,
+        },
+      };
+    default:
+      throw new Error(`Неизвестный тип карточки: ${variant as string}`);
+  }
+}
 
 interface CardProps {
   offer: Offer;
+  variant?: CardVariant;
   onMouseEnter?: (event: MouseEvent<HTMLElement>) => void;
 }
 export function Card({
   offer: { bookmark, premium, imageSRC, price, rating, name, type },
+  variant,
   onMouseEnter,
 }: CardProps) {
+  const variantInfo = useMemo(
+    () => cardVariant(variant ?? 'cities'),
+    [variant]
+  );
+
   return (
-    <article className="cities__card place-card" onMouseEnter={onMouseEnter}>
+    <article
+      className={classNames('place-card', variantInfo.article)}
+      onMouseEnter={onMouseEnter}
+    >
       {premium && (
         <div className="place-card__mark">
           <span>Premium</span>
         </div>
       )}
-      <div className="cities__image-wrapper place-card__image-wrapper">
+      <div
+        className={classNames(
+          variantInfo.imageWrapper,
+          'place-card__image-wrapper'
+        )}
+      >
         <a href="#">
           <img
             className="place-card__image"
             src={imageSRC}
-            width="260"
-            height="200"
+            width={variantInfo.image.width}
+            height={variantInfo.image.height}
             alt="Place image"
           />
         </a>
       </div>
-      <div className="place-card__info">
+      <div className={classNames(variantInfo.cardInfo, 'place-card__info')}>
         <div className="place-card__price-wrapper">
           <div className="place-card__price">
             <b className="place-card__price-value">&euro;{price}</b>
@@ -51,12 +106,7 @@ export function Card({
             </span>
           </button>
         </div>
-        <div className="place-card__rating rating">
-          <div className="place-card__stars rating__stars">
-            <span style={{ width: `${rating * 20}%` }}></span>
-            <span className="visually-hidden">Rating</span>
-          </div>
-        </div>
+        <CardRating rating={rating} />
         <h2 className="place-card__name">
           <a href="#">{name}</a>
         </h2>
