@@ -22,7 +22,11 @@ export function Router({ offers, auth }: AppProps) {
     <BrowserRouter>
       <Routes>
         <Route path={routes.login} element={<Login />} />
-        <Route path={routes.index} element={<Main offers={offers} />} />
+        <Route path={routes.cities} element={<Main offers={offers} />} />
+        <Route
+          path={routes.city({ city: ':city' })}
+          element={<Main offers={offers} />}
+        />
         <Route path={routes.offer({ id: ':id' })} element={<Offer />} />
         <Route
           path={routes.favorites}

@@ -1,8 +1,13 @@
 import { Offer } from '../offer/types';
 import { CityOffers } from '../offer/components/CityOffers';
 import { Header } from '../layout/Header';
+import { Link, useParams } from 'react-router-dom';
+import routes from '../router/routes';
+import { classNames } from '../utils/classNames';
 
 export function Main({ offers }: { offers: Offer[] }) {
+  const { city } = useParams<{ city: string | undefined }>();
+
   return (
     <div className="page page--gray page--main">
       <Header />
@@ -11,36 +16,26 @@ export function Main({ offers }: { offers: Offer[] }) {
         <div className="tabs">
           <section className="locations container">
             <ul className="locations__list tabs__list">
-              <li className="locations__item">
-                <a className="locations__item-link tabs__item" href="#">
-                  <span>Paris</span>
-                </a>
-              </li>
-              <li className="locations__item">
-                <a className="locations__item-link tabs__item" href="#">
-                  <span>Cologne</span>
-                </a>
-              </li>
-              <li className="locations__item">
-                <a className="locations__item-link tabs__item" href="#">
-                  <span>Brussels</span>
-                </a>
-              </li>
-              <li className="locations__item">
-                <a className="locations__item-link tabs__item tabs__item--active">
-                  <span>Amsterdam</span>
-                </a>
-              </li>
-              <li className="locations__item">
-                <a className="locations__item-link tabs__item" href="#">
-                  <span>Hamburg</span>
-                </a>
-              </li>
-              <li className="locations__item">
-                <a className="locations__item-link tabs__item" href="#">
-                  <span>Dusseldorf</span>
-                </a>
-              </li>
+              {[
+                'Paris',
+                'Cologne',
+                'Brussels',
+                'Amsterdam',
+                'Hamburg',
+                'Dusseldorf',
+              ].map((c) => (
+                <li key={c} className="locations__item">
+                  <Link
+                    className={classNames(
+                      'locations__item-link tabs__item',
+                      c === city ? 'tabs__item--active' : null
+                    )}
+                    to={routes.city({ city: c })}
+                  >
+                    <span>{c}</span>
+                  </Link>
+                </li>
+              ))}
             </ul>
           </section>
         </div>
