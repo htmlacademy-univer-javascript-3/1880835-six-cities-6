@@ -1,7 +1,10 @@
+import { useState } from 'react';
 import { Offer } from '../types';
 import { Card } from './Card';
 
 export function CardList({ offers }: { offers: Offer[] }) {
+  const [, setActiveCardID] = useState<number>();
+
   return (
     <section className="cities__places places">
       <h2 className="visually-hidden">Places</h2>
@@ -30,9 +33,12 @@ export function CardList({ offers }: { offers: Offer[] }) {
         </ul>
       </form>
       <div className="cities__places-list places__list tabs__content">
-        {offers.map((p, i) => (
-          // eslint-disable-next-line react/no-array-index-key
-          <Card {...p} key={i} />
+        {offers.map((o) => (
+          <Card
+            key={o.id}
+            offer={o}
+            onMouseEnter={() => setActiveCardID(o.id)}
+          />
         ))}
       </div>
     </section>

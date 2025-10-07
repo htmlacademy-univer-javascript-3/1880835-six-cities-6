@@ -1,17 +1,17 @@
+import { MouseEvent } from 'react';
 import { capitalize } from '../../utils/string';
 import { Offer } from '../types';
 
+interface CardProps {
+  offer: Offer;
+  onMouseEnter?: (event: MouseEvent<HTMLElement>) => void;
+}
 export function Card({
-  bookmark,
-  premium,
-  imageSRC,
-  price,
-  rating,
-  name,
-  type,
-}: Offer) {
+  offer: { bookmark, premium, imageSRC, price, rating, name, type },
+  onMouseEnter,
+}: CardProps) {
   return (
-    <article className="cities__card place-card">
+    <article className="cities__card place-card" onMouseEnter={onMouseEnter}>
       {premium && (
         <div className="place-card__mark">
           <span>Premium</span>
