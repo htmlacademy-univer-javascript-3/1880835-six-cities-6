@@ -5,7 +5,7 @@ import offers from './offer/mocks/offers';
 
 const state: AppProps = {
   offers,
-  auth: false,
+  auth: true,
 };
 
 const root = ReactDOM.createRoot(

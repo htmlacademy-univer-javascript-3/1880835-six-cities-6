@@ -1,5 +1,5 @@
 import { Offer } from '../offer/types';
-import { CardList } from '../offer/components/CardList';
+import { CityOffers } from '../offer/components/CityOffers';
 
 export function Main({ offers }: { offers: Offer[] }) {
   return (
@@ -83,7 +83,7 @@ export function Main({ offers }: { offers: Offer[] }) {
         </div>
         <div className="cities">
           <div className="cities__places-container container">
-            <CardList offers={offers} />
+            <CityOffers offers={offers} />
             <div className="cities__right-section">
               <section className="cities__map map"></section>
             </div>

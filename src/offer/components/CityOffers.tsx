@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Offer } from '../types';
 import { Card } from './Card';
 
-export function CardList({ offers }: { offers: Offer[] }) {
+export function CityOffers({ offers }: { offers: Offer[] }) {
   const [, setActiveCardID] = useState<number>();
 
   return (
