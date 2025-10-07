@@ -25,7 +25,9 @@ export function Favorites({ offers }: { offers: Offer[] }) {
               </div>
             </div>
             <div className="favorites__places">
-              {cityOffers.map((offer) => Card({ offer, variant: 'favorites' }))}
+              {cityOffers.map((offer) => (
+                <Card key={offer.id} offer={offer} variant="favorites" />
+              ))}
             </div>
           </li>
         ))}
