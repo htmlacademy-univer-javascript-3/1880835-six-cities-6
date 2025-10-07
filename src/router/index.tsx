@@ -27,7 +27,10 @@ export function Router({ offers, auth }: AppProps) {
           path={routes.city({ city: ':city' })}
           element={<Main offers={offers} />}
         />
-        <Route path={routes.offer({ id: ':id' })} element={<Offer />} />
+        <Route
+          path={routes.offer({ id: ':id' })}
+          element={<Offer offers={offers} />}
+        />
         <Route
           path={routes.favorites}
           element={
@@ -36,6 +39,7 @@ export function Router({ offers, auth }: AppProps) {
             </PrivateRoute>
           }
         />
+        <Route path={routes.notFound} element={<Page404 />} />
         <Route path="*" element={<Page404 />} />
       </Routes>
     </BrowserRouter>
