@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Offer } from '../types';
 import { Card } from './Card';
+import routes from '../../router/routes';
 
 export function CityOffers({ offers }: { offers: Offer[] }) {
   const [, setActiveCardID] = useState<number>();
@@ -37,6 +38,7 @@ export function CityOffers({ offers }: { offers: Offer[] }) {
           <Card
             key={o.id}
             offer={o}
+            to={routes.offer({ id: o.id })}
             onMouseEnter={() => setActiveCardID(o.id)}
           />
         ))}

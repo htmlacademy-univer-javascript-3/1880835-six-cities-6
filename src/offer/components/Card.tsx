@@ -2,6 +2,7 @@ import { MouseEvent, useMemo } from 'react';
 import { capitalize } from '../../utils/string';
 import { Offer, Rating } from '../types';
 import { classNames } from '../../utils/classNames';
+import { Link } from 'react-router-dom';
 
 function CardRating({ rating }: { rating: Rating }) {
   return (
@@ -43,14 +44,16 @@ function cardVariant(variant: CardVariant) {
 }
 
 interface CardProps {
+  to: string;
   offer: Offer;
   variant?: CardVariant;
   onMouseEnter?: (event: MouseEvent<HTMLElement>) => void;
 }
 export function Card({
-  offer: { bookmark, premium, imageSRC, price, rating, name, type },
+  to,
   variant,
   onMouseEnter,
+  offer: { bookmark, premium, imageSRC, price, rating, name, type },
 }: CardProps) {
   const variantInfo = useMemo(
     () => cardVariant(variant ?? 'cities'),
@@ -73,7 +76,7 @@ export function Card({
           'place-card__image-wrapper'
         )}
       >
-        <a href="#">
+        <Link to={to}>
           <img
             className="place-card__image"
             src={imageSRC}
@@ -81,7 +84,7 @@ export function Card({
             height={variantInfo.image.height}
             alt="Place image"
           />
-        </a>
+        </Link>
       </div>
       <div className={classNames(variantInfo.cardInfo, 'place-card__info')}>
         <div className="place-card__price-wrapper">
@@ -108,7 +111,7 @@ export function Card({
         </div>
         <CardRating rating={rating} />
         <h2 className="place-card__name">
-          <a href="#">{name}</a>
+          <Link to={to}>{name}</Link>
         </h2>
         <p className="place-card__type">{capitalize(type)}</p>
       </div>
