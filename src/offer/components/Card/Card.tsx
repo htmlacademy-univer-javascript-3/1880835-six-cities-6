@@ -1,20 +1,11 @@
 import { MouseEvent, useMemo } from 'react';
-import { capitalize } from '../../utils/string';
-import { Offer, Rating } from '../types';
-import { classNames } from '../../utils/classNames';
+import { capitalize } from '../../../utils/string';
+import { Offer } from '../../types';
+import { classNames } from '../../../utils/classNames';
 import { Link } from 'react-router-dom';
-import routes from '../../router/routes';
-
-function CardRating({ rating }: { rating: Rating }) {
-  return (
-    <div className="place-card__rating rating">
-      <div className="place-card__stars rating__stars">
-        <span style={{ width: `${rating * 20}%` }}></span>
-        <span className="visually-hidden">Rating</span>
-      </div>
-    </div>
-  );
-}
+import routes from '../../../router/routes';
+import { Rating } from '../../../rating/components/Rating';
+import cardRatingClassNames from './constants/ratingClassNames';
 
 type CardVariant = 'cities' | 'favorites';
 function cardVariant(variant: CardVariant) {
@@ -111,7 +102,7 @@ export function Card({
             </span>
           </button>
         </div>
-        <CardRating rating={rating} />
+        <Rating rating={rating} classNames={cardRatingClassNames} />
         <h2 className="place-card__name">
           <Link to={routes.offer({ id })}>{name}</Link>
         </h2>

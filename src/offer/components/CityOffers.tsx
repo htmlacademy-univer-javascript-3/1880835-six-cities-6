@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Offer } from '../types';
-import { Card } from './Card';
+import { Card } from './Card/Card';
 
 export function CityOffers({ offers }: { offers: Offer[] }) {
   const [, setActiveCardID] = useState<number>();

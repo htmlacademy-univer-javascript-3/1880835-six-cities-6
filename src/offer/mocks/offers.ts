@@ -56,4 +56,4 @@ export default [
     type: 'room',
     city: 'Cologne',
   },
-] as const satisfies Offer[];
+] satisfies ReadonlyArray<Offer>;

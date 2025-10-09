@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { Offer } from '../types';
-import { Card } from './Card';
+import { Card } from './Card/Card';
 
 export function Favorites({ offers }: { offers: Offer[] }) {
   const citiesOffers = useMemo<Record<string, Offer[]>>(() => {
