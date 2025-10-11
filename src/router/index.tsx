@@ -5,6 +5,7 @@ import { Main } from '../pages/Main';
 import { Offer } from '../pages/Offer';
 import { Favorites } from '../pages/Favorites';
 import { Page404 } from '../pages/404';
+import routes from './routes';
 
 export function PrivateRoute({
   access,
@@ -13,24 +14,32 @@ export function PrivateRoute({
   access: boolean;
   children: JSX.Element;
 }) {
-  return access ? children : <Navigate to={'/login'} />;
+  return access ? children : <Navigate to={routes.login} />;
 }
 
-export function Router({ places, auth }: AppProps) {
+export function Router({ offers, auth }: AppProps) {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/login" element={<Login />} />
-        <Route path="/" element={<Main places={places} />} />
-        <Route path="/offer/:id" element={<Offer />} />
+        <Route path={routes.login} element={<Login />} />
+        <Route path={routes.cities} element={<Main offers={offers} />} />
         <Route
-          path="/favorites"
+          path={routes.city({ city: ':city' })}
+          element={<Main offers={offers} />}
+        />
+        <Route
+          path={routes.offer({ id: ':id' })}
+          element={<Offer offers={offers} />}
+        />
+        <Route
+          path={routes.favorites}
           element={
             <PrivateRoute access={auth}>
-              <Favorites />
+              <Favorites offers={offers} />
             </PrivateRoute>
           }
         />
+        <Route path={routes.notFound} element={<Page404 />} />
         <Route path="*" element={<Page404 />} />
       </Routes>
     </BrowserRouter>
