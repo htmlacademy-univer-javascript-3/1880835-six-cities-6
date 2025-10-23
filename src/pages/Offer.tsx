@@ -8,6 +8,7 @@ import { classNames } from '../utils/classNames';
 import { Rating } from '../rating/components/Rating';
 import offerRatingClassNames from '../offer/constants/offerRatingClassNames';
 import { Review } from '../reviews';
+import { Map } from '../map';
 
 export function Offer({ offers }: { offers: OfferData[] }) {
   const { id } = useParams<{ id: string }>();
@@ -15,6 +16,7 @@ export function Offer({ offers }: { offers: OfferData[] }) {
     () => offers.find((o) => o.id.toString() === id),
     [id, offers]
   );
+  const nearestOffers = offers.filter((o) => o !== offer).slice(0, 3);
 
   if (offer === undefined) {
     return <Navigate to={routes.notFound} />;
@@ -159,7 +161,12 @@ export function Offer({ offers }: { offers: OfferData[] }) {
               <Review className="offer__reviews" reviews={offer.reviews} />
             </div>
           </div>
-          <section className="offer__map map" />
+          <Map
+            className="offer__map"
+            position={offer.position}
+            currentMarker={offer.position}
+            markers={[offer.position, ...nearestOffers.map((o) => o.position)]}
+          />
         </section>
         <div className="container">
           <section className="near-places places">
@@ -167,16 +174,13 @@ export function Offer({ offers }: { offers: OfferData[] }) {
               Other places in the neighbourhood
             </h2>
             <div className="near-places__list places__list">
-              {offers
-                .filter((o) => o !== offer)
-                .slice(0, 3)
-                .map((o) => (
-                  <Card
-                    key={o.id}
-                    offer={o}
-                    onClick={() => window.scrollTo(0, 0)}
-                  />
-                ))}
+              {nearestOffers.map((o) => (
+                <Card
+                  key={o.id}
+                  offer={o}
+                  onClick={() => window.scrollTo(0, 0)}
+                />
+              ))}
             </div>
           </section>
         </div>
