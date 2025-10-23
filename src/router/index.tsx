@@ -17,15 +17,18 @@ export function PrivateRoute({
   return access ? children : <Navigate to={routes.login} />;
 }
 
-export function Router({ offers, auth }: AppProps) {
+export function Router({ offers, auth, cities }: AppProps) {
   return (
     <BrowserRouter>
       <Routes>
         <Route path={routes.login} element={<Login />} />
-        <Route path={routes.cities} element={<Main offers={offers} />} />
+        <Route
+          path={routes.cities}
+          element={<Main offers={offers} cities={cities} />}
+        />
         <Route
           path={routes.city({ city: ':city' })}
-          element={<Main offers={offers} />}
+          element={<Main offers={offers} cities={cities} />}
         />
         <Route
           path={routes.offer({ id: ':id' })}

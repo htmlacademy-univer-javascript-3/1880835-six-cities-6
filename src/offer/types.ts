@@ -1,9 +1,6 @@
-export type OfferType = 'apartment' | 'room';
+import { Position } from '../map/types';
 
-export interface Location {
-  longitude: number;
-  latitude: number;
-}
+export type OfferType = 'apartment' | 'room';
 
 export interface Offer {
   id: number;
@@ -15,5 +12,5 @@ export interface Offer {
   name: string;
   type: OfferType;
   bookmark: boolean;
-  location: Location;
+  position: Position;
 }
