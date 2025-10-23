@@ -4,9 +4,14 @@ import { Header } from '../layout/Header';
 import { Link, useParams } from 'react-router-dom';
 import routes from '../router/routes';
 import { classNames } from '../utils/classNames';
+import { Map } from '../map';
+import { City } from '../city/types';
+import { useState } from 'react';
 
-export function Main({ offers }: { offers: Offer[] }) {
+export function Main({ offers, cities }: { offers: Offer[]; cities: City[] }) {
   const { city } = useParams<{ city: string | undefined }>();
+  const cityInfo = cities.find((c) => c.name === (city ?? 'Amsterdam')) as City;
+  const [currentOffer, setCurrentOffer] = useState<Offer>();
 
   return (
     <div className="page page--gray page--main">
@@ -16,23 +21,16 @@ export function Main({ offers }: { offers: Offer[] }) {
         <div className="tabs">
           <section className="locations container">
             <ul className="locations__list tabs__list">
-              {[
-                'Paris',
-                'Cologne',
-                'Brussels',
-                'Amsterdam',
-                'Hamburg',
-                'Dusseldorf',
-              ].map((c) => (
-                <li key={c} className="locations__item">
+              {cities.map((c) => (
+                <li key={c.name} className="locations__item">
                   <Link
                     className={classNames(
                       'locations__item-link tabs__item',
-                      c === city ? 'tabs__item--active' : null
+                      c.name === city ? 'tabs__item--active' : null
                     )}
-                    to={routes.city({ city: c })}
+                    to={routes.city({ city: c.name })}
                   >
-                    <span>{c}</span>
+                    <span>{c.name}</span>
                   </Link>
                 </li>
               ))}
@@ -41,9 +39,16 @@ export function Main({ offers }: { offers: Offer[] }) {
         </div>
         <div className="cities">
           <div className="cities__places-container container">
-            <CityOffers offers={offers} />
+            <CityOffers offers={offers} setCurrentOffer={setCurrentOffer} />
             <div className="cities__right-section">
-              <section className="cities__map map"></section>
+              <Map
+                className="cities__map"
+                position={cityInfo.position}
+                markers={offers
+                  .filter((o) => o.city === cityInfo.name)
+                  .map((o) => o.position)}
+                currentMarker={currentOffer?.position}
+              />
             </div>
           </div>
         </div>

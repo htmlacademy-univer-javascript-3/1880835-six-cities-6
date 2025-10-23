@@ -1,10 +1,14 @@
-import { useState } from 'react';
+import { Dispatch, SetStateAction } from 'react';
 import { Offer } from '../types';
 import { Card } from './Card/Card';
 
-export function CityOffers({ offers }: { offers: Offer[] }) {
-  const [, setActiveCardID] = useState<number>();
-
+export function CityOffers({
+  offers,
+  setCurrentOffer,
+}: {
+  offers: Offer[];
+  setCurrentOffer: Dispatch<SetStateAction<Offer | undefined>>;
+}) {
   return (
     <section className="cities__places places">
       <h2 className="visually-hidden">Places</h2>
@@ -34,11 +38,7 @@ export function CityOffers({ offers }: { offers: Offer[] }) {
       </form>
       <div className="cities__places-list places__list tabs__content">
         {offers.map((o) => (
-          <Card
-            key={o.id}
-            offer={o}
-            onMouseEnter={() => setActiveCardID(o.id)}
-          />
+          <Card key={o.id} offer={o} onMouseEnter={() => setCurrentOffer(o)} />
         ))}
       </div>
     </section>

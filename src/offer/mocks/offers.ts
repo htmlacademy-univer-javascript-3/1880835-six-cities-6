@@ -11,6 +11,10 @@ export default [
     name: 'Beautiful & luxurious apartment at great location',
     type: 'apartment',
     city: 'Amsterdam',
+    position: {
+      longitude: 4.85309666406198,
+      latitude: 52.3909553943508,
+    },
   },
   {
     id: 1,
@@ -22,6 +26,10 @@ export default [
     name: 'Wood and stone place',
     type: 'room',
     city: 'Amsterdam',
+    position: {
+      longitude: 4.85309666406198,
+      latitude: 52.3609553943508,
+    },
   },
   {
     id: 2,
@@ -33,6 +41,10 @@ export default [
     name: 'Canal View Prinsengracht',
     type: 'apartment',
     city: 'Amsterdam',
+    position: {
+      longitude: 4.929309666406198,
+      latitude: 52.3909553943508,
+    },
   },
   {
     id: 3,
@@ -43,7 +55,11 @@ export default [
     rating: 5,
     name: 'Nice, cozy, warm big bed apartment',
     type: 'apartment',
-    city: 'Cologne',
+    city: 'Amsterdam',
+    position: {
+      longitude: 4.969309666406198,
+      latitude: 52.4809553943508,
+    },
   },
   {
     id: 4,
@@ -54,6 +70,10 @@ export default [
     rating: 4,
     name: 'Wood and stone place',
     type: 'room',
-    city: 'Cologne',
+    city: 'Amsterdam',
+    position: {
+      longitude: 4.949309666406198,
+      latitude: 52.3709553943508,
+    },
   },
 ] satisfies ReadonlyArray<Offer>;
