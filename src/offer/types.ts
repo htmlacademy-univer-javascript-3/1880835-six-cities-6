@@ -1,4 +1,5 @@
 import { Position } from '../map/types';
+import { Review } from '../reviews/types';
 
 export type OfferType = 'apartment' | 'room';
 
@@ -13,4 +14,5 @@ export interface Offer {
   type: OfferType;
   bookmark: boolean;
   position: Position;
+  reviews: Review[];
 }

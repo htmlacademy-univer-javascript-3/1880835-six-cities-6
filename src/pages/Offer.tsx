@@ -5,9 +5,10 @@ import routes from '../router/routes';
 import { Offer as OfferData } from '../offer/types';
 import { Card } from '../offer/components/Card/Card';
 import { classNames } from '../utils/classNames';
-import { FeedbackForm } from '../offer/components/FeedbackForm';
 import { Rating } from '../rating/components/Rating';
 import offerRatingClassNames from '../offer/constants/offerRatingClassNames';
+import { Review } from '../reviews';
+import { Map } from '../map';
 
 export function Offer({ offers }: { offers: OfferData[] }) {
   const { id } = useParams<{ id: string }>();
@@ -15,6 +16,7 @@ export function Offer({ offers }: { offers: OfferData[] }) {
     () => offers.find((o) => o.id.toString() === id),
     [id, offers]
   );
+  const nearestOffers = offers.filter((o) => o !== offer).slice(0, 3);
 
   if (offer === undefined) {
     return <Navigate to={routes.notFound} />;
@@ -156,47 +158,15 @@ export function Offer({ offers }: { offers: OfferData[] }) {
                   </p>
                 </div>
               </div>
-              <section className="offer__reviews reviews">
-                <h2 className="reviews__title">
-                  Reviews · <span className="reviews__amount">1</span>
-                </h2>
-                <ul className="reviews__list">
-                  <li className="reviews__item">
-                    <div className="reviews__user user">
-                      <div className="reviews__avatar-wrapper user__avatar-wrapper">
-                        <img
-                          className="reviews__avatar user__avatar"
-                          src="img/avatar-max.jpg"
-                          width={54}
-                          height={54}
-                          alt="Reviews avatar"
-                        />
-                      </div>
-                      <span className="reviews__user-name">Max</span>
-                    </div>
-                    <div className="reviews__info">
-                      <div className="reviews__rating rating">
-                        <div className="reviews__stars rating__stars">
-                          <span style={{ width: '80%' }} />
-                          <span className="visually-hidden">Rating</span>
-                        </div>
-                      </div>
-                      <p className="reviews__text">
-                        A quiet cozy and picturesque that hides behind a a river
-                        by the unique lightness of Amsterdam. The building is
-                        green and from 18th century.
-                      </p>
-                      <time className="reviews__time" dateTime="2019-04-24">
-                        April 2019
-                      </time>
-                    </div>
-                  </li>
-                </ul>
-                <FeedbackForm />
-              </section>
+              <Review className="offer__reviews" reviews={offer.reviews} />
             </div>
           </div>
-          <section className="offer__map map" />
+          <Map
+            className="offer__map"
+            position={offer.position}
+            currentMarker={offer.position}
+            markers={[offer.position, ...nearestOffers.map((o) => o.position)]}
+          />
         </section>
         <div className="container">
           <section className="near-places places">
@@ -204,16 +174,13 @@ export function Offer({ offers }: { offers: OfferData[] }) {
               Other places in the neighbourhood
             </h2>
             <div className="near-places__list places__list">
-              {offers
-                .filter((o) => o !== offer)
-                .slice(0, 3)
-                .map((o) => (
-                  <Card
-                    key={o.id}
-                    offer={o}
-                    onClick={() => window.scrollTo(0, 0)}
-                  />
-                ))}
+              {nearestOffers.map((o) => (
+                <Card
+                  key={o.id}
+                  offer={o}
+                  onClick={() => window.scrollTo(0, 0)}
+                />
+              ))}
             </div>
           </section>
         </div>
