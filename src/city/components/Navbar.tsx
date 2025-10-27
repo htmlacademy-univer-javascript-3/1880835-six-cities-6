@@ -1,0 +1,46 @@
+import { useSelector } from 'react-redux';
+import { selectCities, selectCurrentCity } from '../../redux/selector';
+import { Link } from 'react-router-dom';
+import classNames from 'classnames';
+import routes from '../../router/routes';
+
+type NavbarVariant = 'locations';
+function navbarVariant(variant: NavbarVariant) {
+  switch (variant) {
+    case 'locations':
+      return {
+        list: 'locations__list',
+        link: 'locations__item-link',
+      };
+    default:
+      return {
+        list: '',
+        link: '',
+      };
+  }
+}
+
+export function Navbar({ variant }: { variant: NavbarVariant }) {
+  const cities = useSelector(selectCities);
+  const currentCity = useSelector(selectCurrentCity);
+  const classes = navbarVariant(variant);
+
+  return (
+    <ul className={classNames('tabs__list', classes.list)}>
+      {cities.map((c) => (
+        <li key={c.name} className="locations__item">
+          <Link
+            className={classNames(
+              'tabs__item',
+              classes.link,
+              c.name === currentCity ? 'tabs__item--active' : null
+            )}
+            to={routes.city({ city: c.name })}
+          >
+            <span>{c.name}</span>
+          </Link>
+        </li>
+      ))}
+    </ul>
+  );
+}

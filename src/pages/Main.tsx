@@ -1,18 +1,17 @@
 import { Offer } from '../offer/types';
 import { CityOffers } from '../offer/components/CityOffers';
 import { Header } from '../layout/Header';
-import { Link, Navigate, useParams } from 'react-router-dom';
+import { Navigate, useParams } from 'react-router-dom';
 import routes from '../router/routes';
-import { classNames } from '../utils/classNames';
 import { Map } from '../map';
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
-import { selectCities, selectCityOffers } from '../redux/selector';
+import { selectCityOffers } from '../redux/selector';
 import { useCityWithNameAsCurrent } from '../city/hooks/useCityWithNameAsCurrent';
 import { Store } from '../redux';
+import { Navbar } from '../city/components/Navbar';
 
 export function Main() {
-  const cities = useSelector(selectCities);
   const { city: cityName } = useParams<{ city: string | undefined }>();
   const [currentOffer, setCurrentOffer] = useState<Offer>();
   const currentCity = useCityWithNameAsCurrent(cityName);
@@ -35,21 +34,7 @@ export function Main() {
         <h1 className="visually-hidden">Cities</h1>
         <div className="tabs">
           <section className="locations container">
-            <ul className="locations__list tabs__list">
-              {cities.map((c) => (
-                <li key={c.name} className="locations__item">
-                  <Link
-                    className={classNames(
-                      'locations__item-link tabs__item',
-                      c.name === currentCity.name ? 'tabs__item--active' : null
-                    )}
-                    to={routes.city({ city: c.name })}
-                  >
-                    <span>{c.name}</span>
-                  </Link>
-                </li>
-              ))}
-            </ul>
+            <Navbar variant="locations" />
           </section>
         </div>
         <div className="cities">
