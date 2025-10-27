@@ -1,4 +1,4 @@
-import { ChangeEventHandler } from 'react';
+import { ChangeEventHandler, Fragment } from 'react';
 import ratingTitles from '../constants/ratingTitles';
 
 export function Input({
@@ -11,7 +11,7 @@ export function Input({
   return (
     <div className="reviews__rating-form form__rating">
       {([5, 4, 3, 2, 1] as const).map((n) => (
-        <>
+        <Fragment key={n}>
           <input
             className="form__rating-input visually-hidden"
             name="rating"
@@ -30,7 +30,7 @@ export function Input({
               <use xlinkHref="#icon-star" />
             </svg>
           </label>
-        </>
+        </Fragment>
       ))}
     </div>
   );
