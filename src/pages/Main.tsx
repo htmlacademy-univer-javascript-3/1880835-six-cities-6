@@ -1,21 +1,25 @@
 import { Offer } from '../offer/types';
 import { CityOffers } from '../offer/components/CityOffers';
 import { Header } from '../layout/Header';
-import { Link, useParams } from 'react-router-dom';
+import { Link, Navigate, useParams } from 'react-router-dom';
 import routes from '../router/routes';
 import { classNames } from '../utils/classNames';
 import { Map } from '../map';
-import { City } from '../city/types';
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { selectCities, selectOffers } from '../redux/auth';
+import { useCityWithNameAsCurrent } from '../city/hooks/useCityWithNameAsCurrent';
 
 export function Main() {
   const offers = useSelector(selectOffers);
   const cities = useSelector(selectCities);
-  const { city } = useParams<{ city: string | undefined }>(); // TODO: currentCity
-  const cityInfo = cities.find((c) => c.name === (city ?? 'Amsterdam')) as City;
+  const { city: cityName } = useParams<{ city: string | undefined }>();
   const [currentOffer, setCurrentOffer] = useState<Offer>();
+  const currentCity = useCityWithNameAsCurrent(cityName);
+
+  if (currentCity === undefined) {
+    return <Navigate to={routes.notFound} />;
+  }
 
   return (
     <div className="page page--gray page--main">
@@ -30,7 +34,7 @@ export function Main() {
                   <Link
                     className={classNames(
                       'locations__item-link tabs__item',
-                      c.name === city ? 'tabs__item--active' : null
+                      c.name === currentCity.name ? 'tabs__item--active' : null
                     )}
                     to={routes.city({ city: c.name })}
                   >
@@ -47,9 +51,9 @@ export function Main() {
             <div className="cities__right-section">
               <Map
                 className="cities__map"
-                position={cityInfo.position}
+                position={currentCity.position}
                 markers={offers
-                  .filter((o) => o.city === cityInfo.name)
+                  .filter((o) => o.city === currentCity.name)
                   .map((o) => o.position)}
                 currentMarker={currentOffer?.position}
               />
