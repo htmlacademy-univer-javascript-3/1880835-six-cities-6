@@ -2,6 +2,7 @@ import { configureStore, createReducer } from '@reduxjs/toolkit';
 import { Offer } from '../offer/types';
 import { City } from '../city/types';
 import { setAuth, setCities, setCurrentCity, setOffers } from './action';
+import cityNames from '../city/constants/cityNames';
 
 export interface Store {
   auth: boolean;
@@ -12,7 +13,7 @@ export interface Store {
 
 const emptyState = (): Store => ({
   auth: false,
-  currentCity: 'Paris',
+  currentCity: cityNames.Paris,
   offers: [],
   cities: [],
 });
