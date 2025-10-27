@@ -4,28 +4,34 @@ import { Header } from '../layout/Header';
 import { Navigate, useParams } from 'react-router-dom';
 import routes from '../router/routes';
 import { Map } from '../map';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { selectCityOffers } from '../redux/selector';
+import { selectOffers } from '../redux/selector';
 import { useCityWithNameAsCurrent } from '../city/hooks/useCityWithNameAsCurrent';
-import { Store } from '../redux';
 import { Navbar } from '../city/components/Navbar';
 
 export function Main() {
   const { city: cityName } = useParams<{ city: string | undefined }>();
   const [currentOffer, setCurrentOffer] = useState<Offer>();
   const currentCity = useCityWithNameAsCurrent(cityName);
-  const currentCityOffers = useSelector((s: Store) =>
-    selectCityOffers(s, currentCity)
+  const offers = useSelector(selectOffers);
+  const currentCityOffers = useMemo(
+    () => (currentCity ? offers.filter((o) => o.city === currentCity.name) : []),
+    [currentCity, offers]
+  );
+  const markers = useMemo(
+    () =>
+      currentCity
+        ? currentCityOffers
+          .filter((o) => o.city === currentCity.name)
+          .map((o) => o.position)
+        : [],
+    [currentCity, currentCityOffers]
   );
 
   if (currentCity === undefined) {
     return <Navigate to={routes.notFound} />;
   }
-
-  const markers = currentCityOffers
-    .filter((o) => o.city === currentCity.name)
-    .map((o) => o.position);
 
   return (
     <div className="page page--gray page--main">
