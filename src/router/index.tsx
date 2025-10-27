@@ -1,11 +1,11 @@
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
-import { AppProps } from '../App';
 import { Login } from '../pages/Login';
 import { Main } from '../pages/Main';
 import { Offer } from '../pages/Offer';
 import { Favorites } from '../pages/Favorites';
 import { Page404 } from '../pages/404';
 import routes from './routes';
+import { AppProps } from '..';
 
 export function PrivateRoute({
   access,
