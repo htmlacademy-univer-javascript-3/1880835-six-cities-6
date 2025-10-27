@@ -1,10 +1,11 @@
-import { RefObject, useEffect, useRef } from 'react';
+import { RefObject, useEffect, useMemo, useRef } from 'react';
 import {
   map as initMap,
   Map as LeafletMap,
   tileLayer,
   icon,
   marker,
+  Marker,
 } from 'leaflet';
 import { Position } from '../types';
 import defaultIconURL from '../assets/pin.svg?url';
@@ -66,28 +67,55 @@ function useMapPosition({
   }, [position, mapRef]);
 }
 
-function useMapMarkers({
+function useLeafletMarkers({
   mapRef,
   markers,
-  currentMarker,
 }: {
   mapRef: RefObject<LeafletMap>;
   markers?: Position[];
+}) {
+  const result = useMemo(
+    () =>
+      markers
+        ? markers
+          .map(
+            (m) =>
+              mapRef.current &&
+                marker(
+                  { lat: m.latitude, lng: m.longitude },
+                  { icon: defaultIcon }
+                )
+          )
+          .filter((m) => m !== null)
+        : [],
+    [mapRef, markers]
+  );
+  useEffect(() => {
+    result.forEach((m) => mapRef.current && m?.addTo(mapRef.current));
+    return () => result.forEach((m) => m?.remove());
+  }, [mapRef, result]);
+  return result;
+}
+
+function useMapCurrentMarker({
+  leafletMarkers,
+  currentMarker,
+}: {
+  leafletMarkers?: Marker[];
   currentMarker?: Position;
 }) {
   useEffect(() => {
-    if (markers) {
-      const mapMarkers = markers.map(
-        (m) =>
-          mapRef.current &&
-          marker(
-            { lat: m.latitude, lng: m.longitude },
-            { icon: m === currentMarker ? currentIcon : defaultIcon }
-          ).addTo(mapRef.current)
-      );
-      return () => mapMarkers.forEach((m) => m?.remove());
+    if (currentMarker) {
+      const current = leafletMarkers?.find((m) => {
+        const {lat, lng} = m.getLatLng();
+        return lat === currentMarker.latitude && lng === currentMarker.longitude;
+      });
+      current?.setIcon(currentIcon);
+      return () => {
+        current?.setIcon(defaultIcon);
+      };
     }
-  }, [mapRef, markers, currentMarker]);
+  }, [leafletMarkers, currentMarker]);
 }
 
 export function useMap({
@@ -102,6 +130,7 @@ export function useMap({
   currentMarker?: Position;
 }) {
   const mapRef = useMapRef({ containerRef, position });
+  const leafletMarkers = useLeafletMarkers({ mapRef, markers });
+  useMapCurrentMarker({ leafletMarkers, currentMarker });
   useMapPosition({ mapRef, position });
-  useMapMarkers({ mapRef, markers, currentMarker });
 }
