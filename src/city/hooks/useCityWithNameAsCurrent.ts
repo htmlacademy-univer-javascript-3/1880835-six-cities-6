@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { selectCities, selectCurrentCity } from '../../redux/auth';
+import { selectCities, selectCurrentCity } from '../../redux/selector';
 import { useEffect, useMemo } from 'react';
 import { setCurrentCity } from '../../redux/action';
 

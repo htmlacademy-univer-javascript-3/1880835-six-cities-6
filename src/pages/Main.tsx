@@ -7,19 +7,26 @@ import { classNames } from '../utils/classNames';
 import { Map } from '../map';
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
-import { selectCities, selectOffers } from '../redux/auth';
+import { selectCities, selectCityOffers } from '../redux/selector';
 import { useCityWithNameAsCurrent } from '../city/hooks/useCityWithNameAsCurrent';
+import { Store } from '../redux';
 
 export function Main() {
-  const offers = useSelector(selectOffers);
   const cities = useSelector(selectCities);
   const { city: cityName } = useParams<{ city: string | undefined }>();
   const [currentOffer, setCurrentOffer] = useState<Offer>();
   const currentCity = useCityWithNameAsCurrent(cityName);
+  const currentCityOffers = useSelector((s: Store) =>
+    selectCityOffers(s, currentCity)
+  );
 
   if (currentCity === undefined) {
     return <Navigate to={routes.notFound} />;
   }
+
+  const markers = currentCityOffers
+    .filter((o) => o.city === currentCity.name)
+    .map((o) => o.position);
 
   return (
     <div className="page page--gray page--main">
@@ -47,14 +54,16 @@ export function Main() {
         </div>
         <div className="cities">
           <div className="cities__places-container container">
-            <CityOffers offers={offers} setCurrentOffer={setCurrentOffer} />
+            <CityOffers
+              city={currentCity}
+              offers={currentCityOffers}
+              setCurrentOffer={setCurrentOffer}
+            />
             <div className="cities__right-section">
               <Map
                 className="cities__map"
                 position={currentCity.position}
-                markers={offers
-                  .filter((o) => o.city === currentCity.name)
-                  .map((o) => o.position)}
+                markers={markers}
                 currentMarker={currentOffer?.position}
               />
             </div>

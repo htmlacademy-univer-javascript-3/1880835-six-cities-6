@@ -6,7 +6,7 @@ import { Favorites } from '../pages/Favorites';
 import { Page404 } from '../pages/404';
 import routes from './routes';
 import { useSelector } from 'react-redux';
-import { selectAuth } from '../redux/auth';
+import { selectAuth } from '../redux/selector';
 
 export function PrivateRoute({ children }: { children: JSX.Element }) {
   const auth = useSelector(selectAuth);

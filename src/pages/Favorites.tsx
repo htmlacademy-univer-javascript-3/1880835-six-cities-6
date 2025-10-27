@@ -1,7 +1,7 @@
 import { Favorites as FavoritesView } from '../offer/components/Favorites';
 import { Header } from '../layout/Header';
 import { useSelector } from 'react-redux';
-import { selectOffers } from '../redux/auth';
+import { selectOffers } from '../redux/selector';
 
 export function Favorites() {
   const offers = useSelector(selectOffers);
