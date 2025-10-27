@@ -1,8 +1,10 @@
-import { Offer } from '../offer/types';
 import { Favorites as FavoritesView } from '../offer/components/Favorites';
 import { Header } from '../layout/Header';
+import { useSelector } from 'react-redux';
+import { selectOffers } from '../redux/auth';
 
-export function Favorites({ offers }: { offers: Offer[] }) {
+export function Favorites() {
+  const offers = useSelector(selectOffers);
   return (
     <div className="page">
       <Header />

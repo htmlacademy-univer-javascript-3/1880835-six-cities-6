@@ -7,9 +7,13 @@ import { classNames } from '../utils/classNames';
 import { Map } from '../map';
 import { City } from '../city/types';
 import { useState } from 'react';
+import { useSelector } from 'react-redux';
+import { selectCities, selectOffers } from '../redux/auth';
 
-export function Main({ offers, cities }: { offers: Offer[]; cities: City[] }) {
-  const { city } = useParams<{ city: string | undefined }>();
+export function Main() {
+  const offers = useSelector(selectOffers);
+  const cities = useSelector(selectCities);
+  const { city } = useParams<{ city: string | undefined }>(); // TODO: currentCity
   const cityInfo = cities.find((c) => c.name === (city ?? 'Amsterdam')) as City;
   const [currentOffer, setCurrentOffer] = useState<Offer>();
 

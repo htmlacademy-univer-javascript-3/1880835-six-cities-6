@@ -2,15 +2,17 @@ import { Navigate, useParams } from 'react-router-dom';
 import { Header } from '../layout/Header';
 import { useMemo } from 'react';
 import routes from '../router/routes';
-import { Offer as OfferData } from '../offer/types';
 import { Card } from '../offer/components/Card/Card';
 import { classNames } from '../utils/classNames';
 import { Rating } from '../rating/components/Rating';
 import offerRatingClassNames from '../offer/constants/offerRatingClassNames';
 import { Review } from '../reviews';
 import { Map } from '../map';
+import { useSelector } from 'react-redux';
+import { selectOffers } from '../redux/auth';
 
-export function Offer({ offers }: { offers: OfferData[] }) {
+export function Offer() {
+  const offers = useSelector(selectOffers); // TODO: selectOffer
   const { id } = useParams<{ id: string }>();
   const offer = useMemo(
     () => offers.find((o) => o.id.toString() === id),

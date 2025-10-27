@@ -5,40 +5,27 @@ import { Offer } from '../pages/Offer';
 import { Favorites } from '../pages/Favorites';
 import { Page404 } from '../pages/404';
 import routes from './routes';
-import { AppProps } from '..';
+import { useSelector } from 'react-redux';
+import { selectAuth } from '../redux/auth';
 
-export function PrivateRoute({
-  access,
-  children,
-}: {
-  access: boolean;
-  children: JSX.Element;
-}) {
-  return access ? children : <Navigate to={routes.login} />;
+export function PrivateRoute({ children }: { children: JSX.Element }) {
+  const auth = useSelector(selectAuth);
+  return auth ? children : <Navigate to={routes.login} />;
 }
 
-export function Router({ offers, auth, cities }: AppProps) {
+export function Router() {
   return (
     <BrowserRouter>
       <Routes>
         <Route path={routes.login} element={<Login />} />
-        <Route
-          path={routes.cities}
-          element={<Main offers={offers} cities={cities} />}
-        />
-        <Route
-          path={routes.city({ city: ':city' })}
-          element={<Main offers={offers} cities={cities} />}
-        />
-        <Route
-          path={routes.offer({ id: ':id' })}
-          element={<Offer offers={offers} />}
-        />
+        <Route path={routes.cities} element={<Main />} />
+        <Route path={routes.city({ city: ':city' })} element={<Main />} />
+        <Route path={routes.offer({ id: ':id' })} element={<Offer />} />
         <Route
           path={routes.favorites}
           element={
-            <PrivateRoute access={auth}>
-              <Favorites offers={offers} />
+            <PrivateRoute>
+              <Favorites />
             </PrivateRoute>
           }
         />
