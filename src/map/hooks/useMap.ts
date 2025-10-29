@@ -1,4 +1,4 @@
-import { RefObject, useEffect, useMemo, useRef } from 'react';
+import { RefObject, useEffect, useMemo, useRef, useState } from 'react';
 import {
   map as initMap,
   Map as LeafletMap,
@@ -30,10 +30,11 @@ function useMapRef({
   containerRef: RefObject<HTMLElement>;
   position: Position;
 }) {
-  const mapRef = useRef<LeafletMap>();
+  const [leafletMap, setLeafletMap] = useState<LeafletMap>();
+  const isRendered = useRef<boolean>(false);
   useEffect(() => {
-    if (!mapRef.current && containerRef.current) {
-      mapRef.current = initMap(containerRef.current).setView(
+    if (!isRendered.current && containerRef.current) {
+      const map = initMap(containerRef.current).setView(
         [position.latitude, position.longitude],
         13
       );
@@ -41,37 +42,39 @@ function useMapRef({
         maxZoom: 19,
         attribution:
           '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-      }).addTo(mapRef.current);
+      }).addTo(map);
+      setLeafletMap(map);
+      isRendered.current = true;
     }
-  }, [containerRef, position]);
-  return mapRef as RefObject<LeafletMap>;
+  }, [leafletMap, containerRef, position]);
+  return leafletMap;
 }
 
 function useMapPosition({
   position,
-  mapRef,
+  map,
 }: {
   position: Position;
-  mapRef: RefObject<LeafletMap>;
+  map?: LeafletMap;
 }) {
   useEffect(() => {
-    if (mapRef.current) {
-      const { lat, lng } = mapRef.current.getCenter();
+    if (map) {
+      const { lat, lng } = map.getCenter();
       if (position.latitude !== lat || position.longitude !== lng) {
-        mapRef.current.panTo({
+        map.panTo({
           lat: position.latitude,
           lng: position.longitude,
         });
       }
     }
-  }, [position, mapRef]);
+  }, [position, map]);
 }
 
 function useLeafletMarkers({
-  mapRef,
+  map,
   markers,
 }: {
-  mapRef: RefObject<LeafletMap>;
+  map?: LeafletMap;
   markers?: Position[];
 }) {
   const result = useMemo(
@@ -80,20 +83,20 @@ function useLeafletMarkers({
         ? markers
           .map(
             (m) =>
-              mapRef.current &&
+              map &&
                 marker(
                   { lat: m.latitude, lng: m.longitude },
                   { icon: defaultIcon }
                 )
           )
-          .filter((m) => m !== null)
+          .filter((m) => m !== null && m !== undefined)
         : [],
-    [mapRef, markers]
+    [map, markers]
   );
   useEffect(() => {
-    result.forEach((m) => mapRef.current && m?.addTo(mapRef.current));
+    result.forEach((m) => map && m?.addTo(map));
     return () => result.forEach((m) => m?.remove());
-  }, [mapRef, result]);
+  }, [map, result]);
   return result;
 }
 
@@ -107,8 +110,10 @@ function useMapCurrentMarker({
   useEffect(() => {
     if (currentMarker) {
       const current = leafletMarkers?.find((m) => {
-        const {lat, lng} = m.getLatLng();
-        return lat === currentMarker.latitude && lng === currentMarker.longitude;
+        const { lat, lng } = m.getLatLng();
+        return (
+          lat === currentMarker.latitude && lng === currentMarker.longitude
+        );
       });
       current?.setIcon(currentIcon);
       return () => {
@@ -129,8 +134,8 @@ export function useMap({
   markers?: Position[];
   currentMarker?: Position;
 }) {
-  const mapRef = useMapRef({ containerRef, position });
-  const leafletMarkers = useLeafletMarkers({ mapRef, markers });
+  const map = useMapRef({ containerRef, position });
+  const leafletMarkers = useLeafletMarkers({ map, markers });
   useMapCurrentMarker({ leafletMarkers, currentMarker });
-  useMapPosition({ mapRef, position });
+  useMapPosition({ map, position });
 }
