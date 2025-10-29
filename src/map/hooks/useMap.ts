@@ -3,25 +3,11 @@ import {
   map as initMap,
   Map as LeafletMap,
   tileLayer,
-  icon,
   marker,
   Marker,
 } from 'leaflet';
 import { Position } from '../types';
-import defaultIconURL from '../assets/pin.svg?url';
-import currentIconURL from '../assets/main-pin.svg?url';
-
-const defaultIcon = icon({
-  iconUrl: defaultIconURL,
-  iconSize: [40, 40],
-  iconAnchor: [20, 40],
-});
-
-const currentIcon = icon({
-  iconUrl: currentIconURL,
-  iconSize: [40, 40],
-  iconAnchor: [20, 40],
-});
+import { currentIcon, defaultIcon } from '../leaflet/pinIcons';
 
 function useMapRef({
   containerRef,
