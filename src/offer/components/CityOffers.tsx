@@ -1,18 +1,23 @@
 import { Dispatch, SetStateAction } from 'react';
 import { Offer } from '../types';
 import { Card } from './Card/Card';
+import { City } from '../../city/types';
 
 export function CityOffers({
+  city,
   offers,
   setCurrentOffer,
 }: {
+  city: City;
   offers: Offer[];
   setCurrentOffer: Dispatch<SetStateAction<Offer | undefined>>;
 }) {
   return (
     <section className="cities__places places">
       <h2 className="visually-hidden">Places</h2>
-      <b className="places__found">312 places to stay in Amsterdam</b>
+      <b className="places__found">
+        {offers.length} places to stay in {city.name}
+      </b>
       <form className="places__sorting" action="#" method="get">
         <span className="places__sorting-caption">Sort by</span>
         <span className="places__sorting-type" tabIndex={0}>

@@ -1,17 +1,37 @@
 import { Offer } from '../offer/types';
 import { CityOffers } from '../offer/components/CityOffers';
 import { Header } from '../layout/Header';
-import { Link, useParams } from 'react-router-dom';
+import { Navigate, useParams } from 'react-router-dom';
 import routes from '../router/routes';
-import { classNames } from '../utils/classNames';
 import { Map } from '../map';
-import { City } from '../city/types';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { selectOffers } from '../redux/selector';
+import { useCityWithNameAsCurrent } from '../city/hooks/useCityWithNameAsCurrent';
+import { Navbar } from '../city/components/Navbar';
 
-export function Main({ offers, cities }: { offers: Offer[]; cities: City[] }) {
-  const { city } = useParams<{ city: string | undefined }>();
-  const cityInfo = cities.find((c) => c.name === (city ?? 'Amsterdam')) as City;
+export function Main() {
+  const { city: cityName } = useParams<{ city: string | undefined }>();
   const [currentOffer, setCurrentOffer] = useState<Offer>();
+  const currentCity = useCityWithNameAsCurrent(cityName);
+  const offers = useSelector(selectOffers);
+  const currentCityOffers = useMemo(
+    () => (currentCity ? offers.filter((o) => o.city === currentCity.name) : []),
+    [currentCity, offers]
+  );
+  const markers = useMemo(
+    () =>
+      currentCity
+        ? currentCityOffers
+          .filter((o) => o.city === currentCity.name)
+          .map((o) => o.position)
+        : [],
+    [currentCity, currentCityOffers]
+  );
+
+  if (currentCity === undefined) {
+    return <Navigate to={routes.notFound} />;
+  }
 
   return (
     <div className="page page--gray page--main">
@@ -20,33 +40,21 @@ export function Main({ offers, cities }: { offers: Offer[]; cities: City[] }) {
         <h1 className="visually-hidden">Cities</h1>
         <div className="tabs">
           <section className="locations container">
-            <ul className="locations__list tabs__list">
-              {cities.map((c) => (
-                <li key={c.name} className="locations__item">
-                  <Link
-                    className={classNames(
-                      'locations__item-link tabs__item',
-                      c.name === city ? 'tabs__item--active' : null
-                    )}
-                    to={routes.city({ city: c.name })}
-                  >
-                    <span>{c.name}</span>
-                  </Link>
-                </li>
-              ))}
-            </ul>
+            <Navbar variant="locations" />
           </section>
         </div>
         <div className="cities">
           <div className="cities__places-container container">
-            <CityOffers offers={offers} setCurrentOffer={setCurrentOffer} />
+            <CityOffers
+              city={currentCity}
+              offers={currentCityOffers}
+              setCurrentOffer={setCurrentOffer}
+            />
             <div className="cities__right-section">
               <Map
                 className="cities__map"
-                position={cityInfo.position}
-                markers={offers
-                  .filter((o) => o.city === cityInfo.name)
-                  .map((o) => o.position)}
+                position={currentCity.position}
+                markers={markers}
                 currentMarker={currentOffer?.position}
               />
             </div>
