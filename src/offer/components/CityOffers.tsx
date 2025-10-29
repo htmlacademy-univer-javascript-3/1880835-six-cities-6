@@ -1,7 +1,10 @@
-import { Dispatch, SetStateAction } from 'react';
+import { Dispatch, SetStateAction, useMemo } from 'react';
 import { Offer } from '../types';
 import { Card } from './Card/Card';
 import { City } from '../../city/types';
+import { SortSelect } from './SortSelect';
+import { useSortSelectOptions } from './SortSelect/hooks/useSortSelectOptions';
+import { comparatorBySortType } from '../helpers/comparatorBySortType';
 
 export function CityOffers({
   city,
@@ -12,37 +15,24 @@ export function CityOffers({
   offers: Offer[];
   setCurrentOffer: Dispatch<SetStateAction<Offer | undefined>>;
 }) {
+  const { select, selectedOption } = useSortSelectOptions();
+  const comparator = useMemo(
+    () => comparatorBySortType(selectedOption.value),
+    [selectedOption]
+  );
+  const sortedOffers = useMemo(
+    () => offers.toSorted(comparator),
+    [comparator, offers]
+  );
   return (
     <section className="cities__places places">
       <h2 className="visually-hidden">Places</h2>
       <b className="places__found">
-        {offers.length} places to stay in {city.name}
+        {sortedOffers.length} places to stay in {city.name}
       </b>
-      <form className="places__sorting" action="#" method="get">
-        <span className="places__sorting-caption">Sort by</span>
-        <span className="places__sorting-type" tabIndex={0}>
-          Popular
-          <svg className="places__sorting-arrow" width="7" height="4">
-            <use xlinkHref="#icon-arrow-select"></use>
-          </svg>
-        </span>
-        <ul className="places__options places__options--custom places__options--opened">
-          <li className="places__option places__option--active" tabIndex={0}>
-            Popular
-          </li>
-          <li className="places__option" tabIndex={0}>
-            Price: low to high
-          </li>
-          <li className="places__option" tabIndex={0}>
-            Price: high to low
-          </li>
-          <li className="places__option" tabIndex={0}>
-            Top rated first
-          </li>
-        </ul>
-      </form>
+      <SortSelect select={select} />
       <div className="cities__places-list places__list tabs__content">
-        {offers.map((o) => (
+        {sortedOffers.map((o) => (
           <Card key={o.id} offer={o} onMouseEnter={() => setCurrentOffer(o)} />
         ))}
       </div>
