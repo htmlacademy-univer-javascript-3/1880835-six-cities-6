@@ -75,7 +75,7 @@ function useLeafletMarkers({
                   { icon: defaultIcon }
                 )
           )
-          .filter((m) => m !== null && m !== undefined)
+          .filter((m): m is Marker => m !== null && m !== undefined)
         : [],
     [map, markers]
   );
