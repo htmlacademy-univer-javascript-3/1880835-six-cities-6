@@ -9,7 +9,7 @@ import offerRatingClassNames from '../offer/constants/offerRatingClassNames';
 import { Review } from '../reviews';
 import { Map } from '../map';
 import { useSelector } from 'react-redux';
-import { selectOffers } from '../redux/selector';
+import { selectOffers } from '../packages/redux/selector';
 
 export function Offer() {
   const offers = useSelector(selectOffers); // TODO: selectOffer

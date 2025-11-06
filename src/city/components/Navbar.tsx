@@ -1,5 +1,5 @@
 import { useSelector } from 'react-redux';
-import { selectCities, selectCurrentCity } from '../../redux/selector';
+import { selectCities, selectCurrentCity } from '../../packages/redux/selector';
 import { Link } from 'react-router-dom';
 import classNames from 'classnames';
 import routes from '../../router/routes';

@@ -6,7 +6,7 @@ import routes from '../router/routes';
 import { Map } from '../map';
 import { useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { selectOffers } from '../redux/selector';
+import { selectOffers } from '../packages/redux/selector';
 import { useCityWithNameAsCurrent } from '../city/hooks/useCityWithNameAsCurrent';
 import { Navbar } from '../city/components/Navbar';
 

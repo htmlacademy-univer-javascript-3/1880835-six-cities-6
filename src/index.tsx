@@ -4,8 +4,8 @@ import offers from './offer/mocks/offers';
 import cities from './city/mocks/cities';
 import { Router } from './router';
 import { Provider } from 'react-redux';
-import { store } from './redux';
-import { setAuth, setCities, setOffers } from './redux/action';
+import { store } from './packages/redux';
+import { setAuth, setCities, setOffers } from './packages/redux/action';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
