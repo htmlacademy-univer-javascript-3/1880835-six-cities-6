@@ -1,10 +1,21 @@
 import { Favorites as FavoritesView } from '../offer/components/Favorites';
 import { Header } from '../layout/Header';
-import { useSelector } from 'react-redux';
-import { selectOffers } from '../packages/redux/selector';
+import { useOffersQuery } from '../offer';
+import { Loader } from '../ui/components/Loader';
+import { Navigate } from 'react-router-dom';
+import routes from '../router/routes';
 
 export function Favorites() {
-  const offers = useSelector(selectOffers);
+  const { offers, isLoading, isError } = useOffersQuery();
+
+  if (isLoading) {
+    return <Loader />;
+  }
+
+  if (isError) { // TODO: routes.error
+    <Navigate to={routes.notFound} />;
+  }
+
   return (
     <div className="page">
       <Header />

@@ -5,11 +5,10 @@ import { Offer } from '../pages/Offer';
 import { Favorites } from '../pages/Favorites';
 import { Page404 } from '../pages/404';
 import routes from './routes';
-import { useSelector } from 'react-redux';
-import { selectAuth } from '../packages/redux/selector';
+import { useAuth } from '../auth';
 
 export function PrivateRoute({ children }: { children: JSX.Element }) {
-  const auth = useSelector(selectAuth);
+  const auth = useAuth();
   return auth ? children : <Navigate to={routes.login} />;
 }
 

@@ -1,35 +1,41 @@
 import { Offer } from '../offer/types';
 import { CityOffers } from '../offer/components/CityOffers';
 import { Header } from '../layout/Header';
-import { Navigate, useParams } from 'react-router-dom';
-import routes from '../router/routes';
 import { Map } from '../map';
 import { useMemo, useState } from 'react';
-import { useSelector } from 'react-redux';
-import { selectOffers } from '../packages/redux/selector';
-import { useCityWithNameAsCurrent } from '../city/hooks/useCityWithNameAsCurrent';
 import { Navbar } from '../city/components/Navbar';
+import { useOffersQuery } from '../offer';
+import { useCurrentCityFromParams } from '../city/hooks/useCurrentCityFromParams';
+import { useCurrentCity } from '../city/hooks/useCurrentCity';
+import { Loader } from '../ui/components/Loader';
+import { Navigate } from 'react-router-dom';
+import routes from '../router/routes';
 
 export function Main() {
-  const { city: cityName } = useParams<{ city: string | undefined }>();
+  useCurrentCityFromParams();
   const [currentOffer, setCurrentOffer] = useState<Offer>();
-  const currentCity = useCityWithNameAsCurrent(cityName);
-  const offers = useSelector(selectOffers);
+  const { offers, isLoading, isError } = useOffersQuery();
+  const currentCity = useCurrentCity();
   const currentCityOffers = useMemo(
-    () => (currentCity ? offers.filter((o) => o.city === currentCity.name) : []),
+    () =>
+      currentCity ? offers.filter((o) => o.city.name === currentCity.name) : [],
     [currentCity, offers]
   );
   const markers = useMemo(
     () =>
       currentCity
         ? currentCityOffers
-          .filter((o) => o.city === currentCity.name)
-          .map((o) => o.position)
+          .filter((o) => o.city.name === currentCity.name)
+          .map((o) => o.location)
         : [],
     [currentCity, currentCityOffers]
   );
 
-  if (currentCity === undefined) {
+  if (isLoading) {
+    return <Loader />;
+  }
+
+  if (isError) { // TODO: routes.error
     return <Navigate to={routes.notFound} />;
   }
 
@@ -53,9 +59,9 @@ export function Main() {
             <div className="cities__right-section">
               <Map
                 className="cities__map"
-                position={currentCity.position}
+                position={currentCity.location}
                 markers={markers}
-                currentMarker={currentOffer?.position}
+                currentMarker={currentOffer?.location}
               />
             </div>
           </div>

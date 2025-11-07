@@ -1,8 +1,10 @@
 import { useSelector } from 'react-redux';
-import { selectCities, selectCurrentCity } from '../../packages/redux/selector';
+import { selectCitiesQuery, selectCurrentCity } from '../../config/redux/slice/cities/selector';
 import { Link } from 'react-router-dom';
 import classNames from 'classnames';
 import routes from '../../router/routes';
+import { useCitiesQuery } from '../hooks/useCitiesQuery';
+import { useCurrentCity } from '../hooks/useCurrentCity';
 
 type NavbarVariant = 'locations';
 function navbarVariant(variant: NavbarVariant) {
@@ -21,8 +23,8 @@ function navbarVariant(variant: NavbarVariant) {
 }
 
 export function Navbar({ variant }: { variant: NavbarVariant }) {
-  const cities = useSelector(selectCities);
-  const currentCity = useSelector(selectCurrentCity);
+  const { data: cities } = useCitiesQuery();
+  const currentCity = useCurrentCity();
   const classes = navbarVariant(variant);
 
   return (
@@ -33,7 +35,7 @@ export function Navbar({ variant }: { variant: NavbarVariant }) {
             className={classNames(
               'tabs__item',
               classes.link,
-              c.name === currentCity ? 'tabs__item--active' : null
+              c.name === currentCity.name ? 'tabs__item--active' : null
             )}
             to={routes.city({ city: c.name })}
           >

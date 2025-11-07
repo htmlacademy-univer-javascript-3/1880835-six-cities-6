@@ -1,18 +1,19 @@
+import { City } from '../city/types';
 import { Position } from '../map/types';
-import { Review } from '../reviews/types';
 
-export type OfferType = 'apartment' | 'room';
+type OfferType = 'apartment' | 'room';
 
-export interface Offer {
-  id: number;
-  city: string;
-  premium: boolean;
-  imageSRC: string;
+interface Offer {
+  id: string;
+  title: string;
+  type: string;
   price: number;
+  city: City;
+  location: Position;
+  isFavorite: boolean;
+  isPremium: boolean;
   rating: number;
-  name: string;
-  type: OfferType;
-  bookmark: boolean;
-  position: Position;
-  reviews: Review[];
+  previewImage: string;
 }
+
+export type { OfferType, Offer };

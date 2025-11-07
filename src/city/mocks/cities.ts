@@ -4,26 +4,26 @@ import { City } from '../types';
 export default [
   {
     name: cityNames.Paris,
-    position: { longitude: 2.3488, latitude: 48.85341 },
+    position: { longitude: 2.3488, latitude: 48.85341, zoom: 0 },
   },
   {
     name: cityNames.Cologne,
-    position: { longitude: 6.95, latitude: 50.93333 },
+    position: { longitude: 6.95, latitude: 50.93333, zoom: 0 },
   },
   {
     name: cityNames.Brussels,
-    position: { longitude: 4.34878, latitude: 50.85045 },
+    position: { longitude: 4.34878, latitude: 50.85045, zoom: 0 },
   },
   {
     name: cityNames.Amsterdam,
-    position: { longitude: 4.88969, latitude: 52.37403 },
+    position: { longitude: 4.88969, latitude: 52.37403, zoom: 0 },
   },
   {
     name: cityNames.Hamburg,
-    position: { longitude: 9.992895, latitude: 53.550688 },
+    position: { longitude: 9.992895, latitude: 53.550688, zoom: 0 },
   },
   {
     name: cityNames.Dusseldorf,
-    position: { longitude: 6.77616, latitude: 51.2217 },
+    position: { longitude: 6.77616, latitude: 51.2217, zoom: 0 },
   },
 ] satisfies ReadonlyArray<City>;

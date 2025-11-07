@@ -8,17 +8,26 @@ import { Rating } from '../rating/components/Rating';
 import offerRatingClassNames from '../offer/constants/offerRatingClassNames';
 import { Review } from '../reviews';
 import { Map } from '../map';
-import { useSelector } from 'react-redux';
-import { selectOffers } from '../packages/redux/selector';
+import { useOffersQuery } from '../offer';
+import { Loader } from '../ui/components/Loader';
 
 export function Offer() {
-  const offers = useSelector(selectOffers); // TODO: selectOffer
+  const { offers, isLoading, isError } = useOffersQuery(); // TODO: selectOffer
   const { id } = useParams<{ id: string }>();
   const offer = useMemo(
     () => offers.find((o) => o.id.toString() === id),
     [id, offers]
   );
   const nearestOffers = offers.filter((o) => o !== offer).slice(0, 3);
+
+  if (isLoading) {
+    return <Loader />;
+  }
+
+  if (isError) {
+    // TODO: routes.error
+    return <Navigate to={routes.notFound} />;
+  }
 
   if (offer === undefined) {
     return <Navigate to={routes.notFound} />;
@@ -77,17 +86,17 @@ export function Offer() {
           </div>
           <div className="offer__container container">
             <div className="offer__wrapper">
-              {offer.premium && (
+              {offer.isPremium && (
                 <div className="offer__mark">
                   <span>Premium</span>
                 </div>
               )}
               <div className="offer__name-wrapper">
-                <h1 className="offer__name">{offer.name}</h1>
+                <h1 className="offer__name">{offer.title}</h1>
                 <button
                   className={classNames(
                     'offer__bookmark-button button',
-                    offer.bookmark ? 'offer__bookmark-button--active' : null
+                    offer.isFavorite ? 'offer__bookmark-button--active' : null
                   )}
                   type="button"
                 >
@@ -160,14 +169,17 @@ export function Offer() {
                   </p>
                 </div>
               </div>
-              <Review className="offer__reviews" reviews={offer.reviews} />
+              <Review
+                className="offer__reviews"
+                reviews={[] /* FIXME: reviews fetch */}
+              />
             </div>
           </div>
           <Map
             className="offer__map"
-            position={offer.position}
-            currentMarker={offer.position}
-            markers={[offer.position, ...nearestOffers.map((o) => o.position)]}
+            position={offer.location}
+            currentMarker={offer.location}
+            markers={[offer.location, ...nearestOffers.map((o) => o.location)]}
           />
         </section>
         <div className="container">

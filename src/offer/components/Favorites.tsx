@@ -6,7 +6,7 @@ export function Favorites({ offers }: { offers: Offer[] }) {
   const citiesOffers = useMemo<Record<string, Offer[]>>(() => {
     const result: Record<string, Offer[]> = {};
     offers.forEach((o) =>
-      result[o.city] ? result[o.city].push(o) : (result[o.city] = [o])
+      result[o.city.name] ? result[o.city.name].push(o) : (result[o.city.name] = [o])
     );
     return result;
   }, [offers]);

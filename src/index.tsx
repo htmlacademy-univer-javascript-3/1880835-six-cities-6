@@ -1,19 +1,15 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import offers from './offer/mocks/offers';
-import cities from './city/mocks/cities';
 import { Router } from './router';
 import { Provider } from 'react-redux';
-import { store } from './packages/redux';
-import { setAuth, setCities, setOffers } from './packages/redux/action';
+import { store } from './config/redux';
+import { fetchOffers } from './config/redux/slice/offers';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 
-store.dispatch(setAuth(true));
-store.dispatch(setCities(cities));
-store.dispatch(setOffers(offers));
+store.dispatch(fetchOffers());
 
 root.render(
   <React.StrictMode>

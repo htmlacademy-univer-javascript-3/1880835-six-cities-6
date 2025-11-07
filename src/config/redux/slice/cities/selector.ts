@@ -1,0 +1,18 @@
+import { createSelector } from '@reduxjs/toolkit';
+import { State } from '../..';
+import { selectOffers, selectOffersState } from '../offers/selector';
+
+export const selectCitiesState = (s: State) => s.cities;
+
+export const selectCurrentCity = (s: State) => selectCitiesState(s).currentCity;
+
+export const selectUniqueCities = createSelector([selectOffers], (offers) =>
+  offers
+    .map((o) => o.city)
+    .filter((c, i, a) => i === a.findIndex((city) => c.name === city.name))
+);
+
+export const selectCitiesQuery = createSelector(
+  [selectUniqueCities, selectOffersState],
+  (data, { isLoading, isError, error }) => ({ data, isLoading, isError, error })
+);

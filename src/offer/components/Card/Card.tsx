@@ -45,7 +45,7 @@ export function Card({
   variant,
   onClick,
   onMouseEnter,
-  offer: { id, bookmark, premium, imageSRC, price, rating, name, type },
+  offer: { id, isFavorite, isPremium, previewImage, price, rating, title, type },
 }: CardProps) {
   const variantInfo = useMemo(
     () => cardVariant(variant ?? 'cities'),
@@ -58,7 +58,7 @@ export function Card({
       onClick={onClick}
       onMouseEnter={onMouseEnter}
     >
-      {premium && (
+      {isPremium && (
         <div className="place-card__mark">
           <span>Premium</span>
         </div>
@@ -72,7 +72,7 @@ export function Card({
         <Link to={routes.offer({ id })}>
           <img
             className="place-card__image"
-            src={imageSRC}
+            src={previewImage}
             width={variantInfo.image.width}
             height={variantInfo.image.height}
             alt="Place image"
@@ -88,7 +88,7 @@ export function Card({
           <button
             className={[
               'place-card__bookmark-button button',
-              bookmark ? 'place-card__bookmark-button--active' : null,
+              isFavorite ? 'place-card__bookmark-button--active' : null,
             ]
               .filter((e) => e !== null)
               .join(' ')}
@@ -98,13 +98,13 @@ export function Card({
               <use xlinkHref="#icon-bookmark"></use>
             </svg>
             <span className="visually-hidden">
-              {bookmark ? 'In bookmarks' : 'To bookmarks'}
+              {isFavorite ? 'In bookmarks' : 'To bookmarks'}
             </span>
           </button>
         </div>
         <Rating rating={rating} classNames={cardRatingClassNames} />
         <h2 className="place-card__name">
-          <Link to={routes.offer({ id })}>{name}</Link>
+          <Link to={routes.offer({ id })}>{title}</Link>
         </h2>
         <p className="place-card__type">{capitalize(type)}</p>
       </div>
