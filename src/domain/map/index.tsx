@@ -1,9 +1,9 @@
 import 'leaflet/dist/leaflet.css';
-import { classNames } from '../utils/classNames';
 
 import { useRef } from 'react';
 import { useMap } from './hooks/useMap';
 import { Position } from './types';
+import classNames from 'classnames';
 
 export function Map({
   position,

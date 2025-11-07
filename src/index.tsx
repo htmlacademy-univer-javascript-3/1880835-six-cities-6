@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { Router } from './router';
+import { Router } from './domain/router/components/Router';
 import { Provider } from 'react-redux';
 import { store } from './config/redux';
 import { fetchOffers } from './config/redux/slice/offers';

@@ -1,15 +1,15 @@
 import { Navigate, useParams } from 'react-router-dom';
-import { Header } from '../layout/Header';
+import { Header } from '../domain/ui/layout/Header';
 import { useMemo } from 'react';
-import routes from '../router/routes';
-import { Card } from '../offer/components/Card/Card';
+import routes from '../domain/router/constants/ROUTES';
+import { Card } from '../domain/offer/components/Card/Card';
 import { classNames } from '../utils/classNames';
-import { Rating } from '../rating/components/Rating';
-import offerRatingClassNames from '../offer/constants/offerRatingClassNames';
-import { Review } from '../reviews';
-import { Map } from '../map';
-import { useOffersQuery } from '../offer';
-import { Loader } from '../ui/components/Loader';
+import { Rating } from '../domain/rating/components/Rating';
+import offerRatingClassNames from '../domain/offer/constants/offerRatingClassNames';
+import { Review } from '../domain/reviews';
+import { Map } from '../domain/map';
+import { useOffersQuery } from '../domain/offer';
+import { Loader } from '../domain/ui/components/Loader';
 
 export function Offer() {
   const { offers, isLoading, isError } = useOffersQuery(); // TODO: selectOffer

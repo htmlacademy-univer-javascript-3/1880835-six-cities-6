@@ -1,16 +1,11 @@
-import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
-import { Login } from '../pages/Login';
-import { Main } from '../pages/Main';
-import { Offer } from '../pages/Offer';
-import { Favorites } from '../pages/Favorites';
-import { Page404 } from '../pages/404';
-import routes from './routes';
-import { useAuth } from '../auth';
-
-export function PrivateRoute({ children }: { children: JSX.Element }) {
-  const auth = useAuth();
-  return auth ? children : <Navigate to={routes.login} />;
-}
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import routes from '../constants/ROUTES';
+import { Login } from '../../../pages/Login';
+import { Main } from '../../../pages/Main';
+import { Offer } from '../../../pages/Offer';
+import { Favorites } from '../../../pages/Favorites';
+import { Page404 } from '../../../pages/404';
+import { PrivateRoute } from './PrivateRoute';
 
 export function Router() {
   return (

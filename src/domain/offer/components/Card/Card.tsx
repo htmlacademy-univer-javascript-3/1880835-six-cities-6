@@ -1,11 +1,11 @@
 import { MouseEvent, useMemo } from 'react';
-import { capitalize } from '../../../utils/string';
+import { capitalize } from '../../../../utils/string';
 import { Offer } from '../../types';
-import { classNames } from '../../../utils/classNames';
 import { Link } from 'react-router-dom';
-import routes from '../../../router/routes';
+import routes from '../../../router/constants/ROUTES';
 import { Rating } from '../../../rating/components/Rating';
 import cardRatingClassNames from './constants/ratingClassNames';
+import classNames from 'classnames';
 
 type CardVariant = 'cities' | 'favorites';
 function cardVariant(variant: CardVariant) {
@@ -45,7 +45,16 @@ export function Card({
   variant,
   onClick,
   onMouseEnter,
-  offer: { id, isFavorite, isPremium, previewImage, price, rating, title, type },
+  offer: {
+    id,
+    isFavorite,
+    isPremium,
+    previewImage,
+    price,
+    rating,
+    title,
+    type,
+  },
 }: CardProps) {
   const variantInfo = useMemo(
     () => cardVariant(variant ?? 'cities'),

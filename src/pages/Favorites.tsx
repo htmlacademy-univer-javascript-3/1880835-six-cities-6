@@ -1,9 +1,9 @@
-import { Favorites as FavoritesView } from '../offer/components/Favorites';
-import { Header } from '../layout/Header';
-import { useOffersQuery } from '../offer';
-import { Loader } from '../ui/components/Loader';
+import { Favorites as FavoritesView } from '../domain/offer/components/Favorites';
+import { Header } from '../domain/ui/layout/Header';
+import { useOffersQuery } from '../domain/offer';
+import { Loader } from '../domain/ui/components/Loader';
 import { Navigate } from 'react-router-dom';
-import routes from '../router/routes';
+import routes from '../domain/router/constants/ROUTES';
 
 export function Favorites() {
   const { offers, isLoading, isError } = useOffersQuery();
@@ -12,7 +12,8 @@ export function Favorites() {
     return <Loader />;
   }
 
-  if (isError) { // TODO: routes.error
+  if (isError) {
+    // TODO: routes.error
     <Navigate to={routes.notFound} />;
   }
 

@@ -1,15 +1,15 @@
-import { Offer } from '../offer/types';
-import { CityOffers } from '../offer/components/CityOffers';
-import { Header } from '../layout/Header';
-import { Map } from '../map';
+import { Offer } from '../domain/offer/types';
+import { Header } from '../domain/ui/layout/Header';
+import { Map } from '../domain/map';
 import { useMemo, useState } from 'react';
-import { Navbar } from '../city/components/Navbar';
-import { useOffersQuery } from '../offer';
-import { useCurrentCityFromParams } from '../city/hooks/useCurrentCityFromParams';
-import { useCurrentCity } from '../city/hooks/useCurrentCity';
-import { Loader } from '../ui/components/Loader';
+import { Navbar } from '../domain/city/components/Navbar';
+import { useOffersQuery } from '../domain/offer';
+import { useCurrentCityFromParams } from '../domain/city/hooks/useCurrentCityFromParams';
+import { useCurrentCity } from '../domain/city/hooks/useCurrentCity';
+import { Loader } from '../domain/ui/components/Loader';
 import { Navigate } from 'react-router-dom';
-import routes from '../router/routes';
+import routes from '../domain/router/constants/ROUTES';
+import { CityOffers } from '../domain/offer/components/CityOffers';
 
 export function Main() {
   useCurrentCityFromParams();
@@ -35,7 +35,8 @@ export function Main() {
     return <Loader />;
   }
 
-  if (isError) { // TODO: routes.error
+  if (isError) {
+    // TODO: routes.error
     return <Navigate to={routes.notFound} />;
   }
 

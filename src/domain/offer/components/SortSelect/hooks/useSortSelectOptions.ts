@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
-import { Option, useSelect } from '../../../../ui/hooks/useSelect';
 import SORT_TYPES from '../../../constants/SORT_TYPES';
+import { Option, useSelect } from '../../../../ui/hooks/useSelect';
 
 export function useSortSelectOptions() {
   const options = useMemo<Option[]>(

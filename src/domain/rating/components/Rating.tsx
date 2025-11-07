@@ -1,4 +1,4 @@
-import { classNames as cs } from '../../utils/classNames';
+import cs from 'classnames';
 
 export function Rating({
   rating,

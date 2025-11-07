@@ -1,8 +1,6 @@
-import { useSelector } from 'react-redux';
-import { selectCitiesQuery, selectCurrentCity } from '../../config/redux/slice/cities/selector';
 import { Link } from 'react-router-dom';
 import classNames from 'classnames';
-import routes from '../../router/routes';
+import routes from '../../../domain/router/constants/ROUTES';
 import { useCitiesQuery } from '../hooks/useCitiesQuery';
 import { useCurrentCity } from '../hooks/useCurrentCity';
 

@@ -1,6 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { api, ENDPOINTS } from '../../../axios';
-import { Offer } from '../../../../offer';
+import { Offer } from '../../../../domain/offer';
 
 export const fetchOffers = createAsyncThunk<
   Offer[],

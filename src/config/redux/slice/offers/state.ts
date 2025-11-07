@@ -1,4 +1,4 @@
-import { Offer } from '../../../../offer';
+import { Offer } from '../../../../domain/offer';
 
 interface OffersState {
   offers: Offer[];

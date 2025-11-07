@@ -1,4 +1,4 @@
-import { City } from '../../../../city';
+import { City } from '../../../../domain/city';
 
 interface CitiesSliceState {
   currentCity: City;
