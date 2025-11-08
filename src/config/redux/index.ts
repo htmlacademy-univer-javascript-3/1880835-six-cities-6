@@ -3,6 +3,8 @@ import { api } from '../axios';
 import { ExtraArgument } from './thunk';
 import { offersSlice } from './slice/offers';
 import { citiesSlice } from './slice/cities';
+import { OffersSliceState } from './slice/offers/state';
+import { CitiesSliceState } from './slice/cities/state';
 
 const store = configureStore({
   reducer: {
@@ -15,7 +17,12 @@ const store = configureStore({
     }),
 });
 
-type State = ReturnType<typeof store.getState>;
+interface State {
+  offers: OffersSliceState;
+  cities: CitiesSliceState;
+}
+
+type AppDispatch = typeof store.dispatch;
 
 export { store };
-export type { State };
+export type { State, AppDispatch };

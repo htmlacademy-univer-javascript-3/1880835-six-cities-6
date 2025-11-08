@@ -1,2 +1,2 @@
 export type * from './types';
-export { useOffersQuery } from './hooks/useOffers';
+export { useOffersQuery } from './hooks/useOffersQuery';

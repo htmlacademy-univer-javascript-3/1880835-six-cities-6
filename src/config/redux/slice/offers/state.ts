@@ -1,17 +1,19 @@
 import { Offer } from '../../../../domain/offer';
 
-interface OffersState {
+interface OffersSliceState {
   offers: {
     data: Offer[];
+    isFetched: boolean;
     isLoading: boolean;
     isError: boolean;
     error: null | Error;
   };
 }
 
-const emptyState = (): OffersState => ({
+const emptyState = (): OffersSliceState => ({
   offers: {
     data: [],
+    isFetched: false,
     isLoading: false,
     isError: false,
     error: null,
@@ -19,4 +21,4 @@ const emptyState = (): OffersState => ({
 });
 
 export { emptyState };
-export type { OffersState };
+export type { OffersSliceState as OffersSliceState };
