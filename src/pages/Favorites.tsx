@@ -6,7 +6,7 @@ import { Navigate } from 'react-router-dom';
 import routes from '../domain/router/constants/ROUTES';
 
 export function Favorites() {
-  const { offers, isLoading, isError } = useOffersQuery();
+  const { data: offers, isLoading, isError } = useOffersQuery();
 
   if (isLoading) {
     return <Loader />;

@@ -10,16 +10,16 @@ export const offersSlice = createSlice({
   extraReducers: (builder) =>
     builder
       .addCase(fetchOffers.pending, (s) => {
-        s.isLoading = true;
-        s.error = null;
+        s.offers.isLoading = true;
+        s.offers.error = null;
       })
       .addCase(fetchOffers.fulfilled, (s, a) => {
-        s.isLoading = false;
-        s.offers = a.payload;
+        s.offers.isLoading = false;
+        s.offers.data = a.payload;
       })
       .addCase(fetchOffers.rejected, (s, a) => {
-        s.isLoading = false;
-        s.error = a.payload as Error;
+        s.offers.isLoading = false;
+        s.offers.error = a.payload as Error;
       }),
 });
 

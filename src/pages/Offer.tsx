@@ -12,7 +12,7 @@ import { useOffersQuery } from '../domain/offer';
 import { Loader } from '../domain/ui/components/Loader';
 
 export function Offer() {
-  const { offers, isLoading, isError } = useOffersQuery(); // TODO: selectOffer
+  const { data: offers, isLoading, isError } = useOffersQuery(); // TODO: selectOffer
   const { id } = useParams<{ id: string }>();
   const offer = useMemo(
     () => offers.find((o) => o.id.toString() === id),

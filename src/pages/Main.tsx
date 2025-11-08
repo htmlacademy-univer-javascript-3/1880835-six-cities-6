@@ -14,7 +14,7 @@ import { CityOffers } from '../domain/offer/components/CityOffers';
 export function Main() {
   useCurrentCityFromParams();
   const [currentOffer, setCurrentOffer] = useState<Offer>();
-  const { offers, isLoading, isError } = useOffersQuery();
+  const { data: offers, isLoading, isError } = useOffersQuery();
   const currentCity = useCurrentCity();
   const currentCityOffers = useMemo(
     () =>

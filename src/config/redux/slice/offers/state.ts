@@ -1,17 +1,21 @@
 import { Offer } from '../../../../domain/offer';
 
 interface OffersState {
-  offers: Offer[];
-  isLoading: boolean;
-  isError: boolean;
-  error: null | Error;
+  offers: {
+    data: Offer[];
+    isLoading: boolean;
+    isError: boolean;
+    error: null | Error;
+  };
 }
 
 const emptyState = (): OffersState => ({
-  offers: [],
-  isLoading: false,
-  isError: false,
-  error: null,
+  offers: {
+    data: [],
+    isLoading: false,
+    isError: false,
+    error: null,
+  },
 });
 
 export { emptyState };
