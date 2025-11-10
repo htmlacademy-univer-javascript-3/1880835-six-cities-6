@@ -15,10 +15,9 @@ export const fetchOfferComments = createAsyncThunk<
         await api.get<PostedComment[]>(ENDPOINTS.comments(offerID as string))
       ).data;
     } catch (error) {
-      rejectWithValue(
+      return rejectWithValue(
         `Не удалось получить список комментариев для предложения ${offerID}`
       );
-      throw error;
     }
   },
   {
