@@ -1,12 +1,14 @@
 import { useMemo } from 'react';
-import { Offer } from '../types';
+import { OfferMeta } from '../types';
 import { Card } from './Card/Card';
 
-export function Favorites({ offers }: { offers: Offer[] }) {
-  const citiesOffers = useMemo<Record<string, Offer[]>>(() => {
-    const result: Record<string, Offer[]> = {};
+export function Favorites({ offers }: { offers: OfferMeta[] }) {
+  const citiesOffers = useMemo<Record<string, OfferMeta[]>>(() => {
+    const result: Record<string, OfferMeta[]> = {};
     offers.forEach((o) =>
-      result[o.city.name] ? result[o.city.name].push(o) : (result[o.city.name] = [o])
+      result[o.city.name]
+        ? result[o.city.name].push(o)
+        : (result[o.city.name] = [o])
     );
     return result;
   }, [offers]);
@@ -26,7 +28,12 @@ export function Favorites({ offers }: { offers: Offer[] }) {
             </div>
             <div className="favorites__places">
               {cityOffers.map((offer) => (
-                <Card key={offer.id} offer={offer} variant="favorites" />
+                <Card
+                  key={offer.id}
+                  offer={offer}
+                  imageURL={offer.previewImage}
+                  variant="favorites"
+                />
               ))}
             </div>
           </li>
