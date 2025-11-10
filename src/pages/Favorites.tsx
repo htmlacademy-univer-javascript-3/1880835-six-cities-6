@@ -4,17 +4,18 @@ import { useOffersQuery } from '../domain/offer';
 import { Loader } from '../domain/ui/components/Loader';
 import { Navigate } from 'react-router-dom';
 import routes from '../domain/router/constants/ROUTES';
+import { setErrorMessage } from '../domain/error/features/setErrorMessage';
 
 export function Favorites() {
-  const { data: offers, isLoading, isError } = useOffersQuery();
+  const { data: offers, isLoading, isError, error } = useOffersQuery();
 
   if (isLoading) {
     return <Loader />;
   }
 
   if (isError || offers === undefined) {
-    // TODO: routes.error
-    return <Navigate to={routes.notFound} />;
+    setErrorMessage(error);
+    return <Navigate to={routes.error} />;
   }
 
   return (

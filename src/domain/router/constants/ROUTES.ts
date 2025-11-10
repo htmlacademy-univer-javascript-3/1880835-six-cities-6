@@ -5,4 +5,5 @@ export default {
   offer: ({ id }: { id: string }) => `/offer/${id}`,
   favorites: '/favorites',
   notFound: '/404',
+  error: '/error',
 } as const;

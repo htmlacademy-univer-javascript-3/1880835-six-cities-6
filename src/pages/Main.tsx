@@ -10,11 +10,12 @@ import { Loader } from '../domain/ui/components/Loader';
 import { Navigate } from 'react-router-dom';
 import routes from '../domain/router/constants/ROUTES';
 import { CityOffers } from '../domain/offer/components/CityOffers';
+import { setErrorMessage } from '../domain/error/features/setErrorMessage';
 
 export function Main() {
   useCurrentCityFromParams();
   const [currentOffer, setCurrentOffer] = useState<Offer>();
-  const { data: offers, isLoading, isError } = useOffersQuery();
+  const { data: offers, isLoading, isError, error } = useOffersQuery();
   const currentCity = useCurrentCity();
   const currentCityOffers = useMemo(
     () =>
@@ -38,8 +39,8 @@ export function Main() {
   }
 
   if (isError) {
-    // TODO: routes.error
-    return <Navigate to={routes.notFound} />;
+    setErrorMessage(error);
+    return <Navigate to={routes.error} />;
   }
 
   return (

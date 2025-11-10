@@ -16,5 +16,5 @@ export interface ThunkQuery<Data> {
   isFetched: boolean;
   isLoading: boolean;
   isError: boolean;
-  error?: null | string;
+  error?: string;
 }

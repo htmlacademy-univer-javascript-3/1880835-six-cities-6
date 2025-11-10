@@ -6,6 +6,7 @@ import { Offer } from '../../../pages/Offer';
 import { Favorites } from '../../../pages/Favorites';
 import { Page404 } from '../../../pages/404';
 import { PrivateRoute } from './PrivateRoute';
+import { Error } from '../../../pages/Error';
 
 export function Router() {
   return (
@@ -24,6 +25,7 @@ export function Router() {
           }
         />
         <Route path={routes.notFound} element={<Page404 />} />
+        <Route path={routes.error} element={<Error />} />
         <Route path="*" element={<Page404 />} />
       </Routes>
     </BrowserRouter>

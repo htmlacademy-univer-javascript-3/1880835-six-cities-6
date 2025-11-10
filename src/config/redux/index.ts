@@ -7,9 +7,12 @@ import { OffersSliceState } from './slice/offers/state';
 import { CitiesSliceState } from './slice/cities/state';
 import { CommentsSliceState } from './slice/comments/state';
 import { commentsSlice } from './slice/comments';
+import { errorSlice } from './slice/error';
+import { ErrorSliceState } from './slice/error/state';
 
 const store = configureStore({
   reducer: {
+    error: errorSlice.reducer,
     offers: offersSlice.reducer,
     cities: citiesSlice.reducer,
     comments: commentsSlice.reducer,
@@ -21,6 +24,7 @@ const store = configureStore({
 });
 
 interface State {
+  error: ErrorSliceState;
   offers: OffersSliceState;
   cities: CitiesSliceState;
   comments: CommentsSliceState;

@@ -10,10 +10,11 @@ import { Map } from '../domain/map';
 import { Loader } from '../domain/ui/components/Loader';
 import { useOfferQuery } from '../domain/offer/hooks/useOfferQuery';
 import { useNearbyOffersQuery } from '../domain/offer/hooks/useNearbyOffersQuery';
+import { setErrorMessage } from '../domain/error/features/setErrorMessage';
 
 export function Offer() {
   const { id } = useParams<{ id: string }>();
-  const { data: offer, isLoading, isError } = useOfferQuery(id);
+  const { data: offer, isLoading, isError, error } = useOfferQuery(id);
   const { data: nearestOffers } = useNearbyOffersQuery({
     offerID: id,
     limit: 3,
@@ -24,8 +25,8 @@ export function Offer() {
   }
 
   if (isError) {
-    // TODO: routes.error
-    return <Navigate to={routes.notFound} />;
+    setErrorMessage(error);
+    return <Navigate to={routes.error} />;
   }
 
   if (offer === undefined) {
