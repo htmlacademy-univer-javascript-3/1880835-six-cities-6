@@ -5,7 +5,7 @@ import { Card } from '../domain/offer/components/Card/Card';
 import classNames from 'classnames';
 import { Rating } from '../domain/rating/components/Rating';
 import offerRatingClassNames from '../domain/offer/constants/offerRatingClassNames';
-import { Review } from '../domain/reviews';
+import { CommentsSection } from '../domain/comment/components/CommentsSection';
 import { Map } from '../domain/map';
 import { Loader } from '../domain/ui/components/Loader';
 import { useOfferQuery } from '../domain/offer/hooks/useOfferQuery';
@@ -124,10 +124,7 @@ export function Offer() {
                   <p className="offer__text">{offer.description}</p>
                 </div>
               </div>
-              <Review
-                className="offer__reviews"
-                reviews={[] /* FIXME: reviews fetch */}
-              />
+              <CommentsSection className="offer__reviews" offerID={offer.id} />
             </div>
           </div>
           <Map

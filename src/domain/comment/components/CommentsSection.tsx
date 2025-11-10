@@ -1,0 +1,46 @@
+import classNames from 'classnames';
+import { CommentForm } from './CommentForm';
+import { CommentsList } from './CommentsList';
+import { useOfferCommentsQuery } from '../hooks/useOfferCommentsQuery';
+import { Loader } from '../../ui/components/Loader';
+import { ReactNode } from 'react';
+
+export function CommentsSection({
+  offerID,
+  className,
+}: {
+  offerID?: string;
+  className?: string;
+}) {
+  const {
+    data: comments,
+    isLoading,
+    isError,
+    error,
+  } = useOfferCommentsQuery(offerID);
+  const Section = ({ children }: { children: ReactNode }) => (
+    <section className={classNames('reviews', className)}>{children}</section>
+  );
+
+  if (isLoading) {
+    return (
+      <Section>
+        <Loader />
+      </Section>
+    );
+  }
+
+  if (isError || comments === undefined) {
+    return <Section>{error ?? 'Comments get error'}</Section>;
+  }
+
+  return (
+    <section className={classNames('reviews', className)}>
+      <h2 className="reviews__title">
+        Reviews · <span className="reviews__amount">{comments.length}</span>
+      </h2>
+      <CommentsList comments={comments} />
+      <CommentForm />
+    </section>
+  );
+}

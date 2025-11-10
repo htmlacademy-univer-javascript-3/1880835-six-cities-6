@@ -1,5 +1,6 @@
 import { City } from '../city/types';
 import { Position } from '../map/types';
+import { User } from '../user';
 
 type OfferType = 'apartment' | 'room';
 
@@ -23,11 +24,7 @@ interface OfferDetails extends Offer {
   description: string;
   bedrooms: number;
   goods: string[];
-  host: {
-    name: string;
-    avatarUrl: string;
-    isPro: boolean;
-  };
+  host: User;
   images: string[];
   maxAdults: number;
 }

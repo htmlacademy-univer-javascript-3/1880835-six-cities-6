@@ -8,8 +8,9 @@ export const fetchOffers = createAsyncThunk<OfferMeta[], void, ThunkConfig>(
   async (_: void, { rejectWithValue, extra: { api } }) => {
     try {
       return (await api.get<OfferMeta[]>(ENDPOINTS.offers)).data;
-    } catch (cause) {
-      return rejectWithValue('Не удалось получить список предложения');
+    } catch (error) {
+      rejectWithValue('Не удалось получить список предложения');
+      throw error;
     }
   },
   {
@@ -32,8 +33,9 @@ export const fetchOffer = createAsyncThunk<
     try {
       return (await api.get<OfferDetails>(ENDPOINTS.offer(offerID as string)))
         .data;
-    } catch (cause) {
-      return rejectWithValue(`Не удалось получить предложение с id ${offerID}`);
+    } catch (error) {
+      rejectWithValue(`Не удалось получить предложение с id ${offerID}`);
+      throw error;
     }
   },
   {
@@ -61,10 +63,11 @@ export const fetchNearbyOffers = createAsyncThunk<
       return (
         await api.get<OfferMeta[]>(ENDPOINTS.nearbyOffers(offerID as string))
       ).data;
-    } catch (cause) {
-      return rejectWithValue(
+    } catch (error) {
+      rejectWithValue(
         `Не удалось получить ближайшие предложения для id ${offerID}`
       );
+      throw error;
     }
   },
   {
