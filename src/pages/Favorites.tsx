@@ -1,5 +1,5 @@
 import { Favorites as FavoritesView } from '../domain/offer/components/Favorites';
-import { Header } from '../domain/ui/layout/Header';
+import { Header } from '../domain/ui/components/Header';
 import { useOffersQuery } from '../domain/offer';
 import { Loader } from '../domain/ui/components/Loader';
 import { Navigate } from 'react-router-dom';
