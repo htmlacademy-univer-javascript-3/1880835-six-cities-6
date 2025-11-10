@@ -9,6 +9,8 @@ import {
 import { Position } from '../types';
 import { currentIcon, defaultIcon } from '../leaflet/pinIcons';
 
+const MAX_ZOOM = 19;
+
 function useMapRef({
   containerRef,
   position,
@@ -22,10 +24,10 @@ function useMapRef({
     if (!isRendered.current && containerRef.current) {
       const map = initMap(containerRef.current).setView(
         [position.latitude, position.longitude],
-        13
+        position.zoom
       );
       tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        maxZoom: 19,
+        maxZoom: MAX_ZOOM,
         attribution:
           '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
       }).addTo(map);
@@ -51,6 +53,7 @@ function useMapPosition({
           lat: position.latitude,
           lng: position.longitude,
         });
+        map.setZoom(position.zoom);
       }
     }
   }, [position, map]);

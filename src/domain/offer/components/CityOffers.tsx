@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction, useMemo } from 'react';
-import { Offer } from '../types';
+import { Offer, OfferMeta } from '../types';
 import { Card } from './Card/Card';
 import { City } from '../../city/types';
 import { SortSelect } from './SortSelect';
@@ -12,7 +12,7 @@ export function CityOffers({
   setCurrentOffer,
 }: {
   city: City;
-  offers: Offer[];
+  offers: OfferMeta[];
   setCurrentOffer: Dispatch<SetStateAction<Offer | undefined>>;
 }) {
   const { select, selectedOption } = useSortSelectOptions();
@@ -33,7 +33,12 @@ export function CityOffers({
       <SortSelect select={select} />
       <div className="cities__places-list places__list tabs__content">
         {sortedOffers.map((o) => (
-          <Card key={o.id} offer={o} onMouseEnter={() => setCurrentOffer(o)} />
+          <Card
+            key={o.id}
+            offer={o}
+            imageURL={o.previewImage}
+            onMouseEnter={() => setCurrentOffer(o)}
+          />
         ))}
       </div>
     </section>

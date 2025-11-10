@@ -1,6 +1,6 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { api } from '../axios';
-import { ExtraArgument } from './thunk';
+import { ExtraArgument } from './thunk/types';
 import { offersSlice } from './slice/offers';
 import { citiesSlice } from './slice/cities';
 import { OffersSliceState } from './slice/offers/state';

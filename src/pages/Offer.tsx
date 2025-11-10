@@ -1,24 +1,23 @@
 import { Navigate, useParams } from 'react-router-dom';
 import { Header } from '../domain/ui/layout/Header';
-import { useMemo } from 'react';
 import routes from '../domain/router/constants/ROUTES';
 import { Card } from '../domain/offer/components/Card/Card';
-import { classNames } from '../utils/classNames';
+import classNames from 'classnames';
 import { Rating } from '../domain/rating/components/Rating';
 import offerRatingClassNames from '../domain/offer/constants/offerRatingClassNames';
 import { Review } from '../domain/reviews';
 import { Map } from '../domain/map';
-import { useOffersQuery } from '../domain/offer';
 import { Loader } from '../domain/ui/components/Loader';
+import { useOfferQuery } from '../domain/offer/hooks/useOfferQuery';
+import { useNearbyOffersQuery } from '../domain/offer/hooks/useNearbyOffersQuery';
 
 export function Offer() {
-  const { data: offers, isLoading, isError } = useOffersQuery(); // TODO: selectOffer
   const { id } = useParams<{ id: string }>();
-  const offer = useMemo(
-    () => offers.find((o) => o.id.toString() === id),
-    [id, offers]
-  );
-  const nearestOffers = offers.filter((o) => o !== offer).slice(0, 3);
+  const { data: offer, isLoading, isError } = useOfferQuery(id);
+  const { data: nearestOffers } = useNearbyOffersQuery({
+    offerID: id,
+    limit: 3,
+  });
 
   if (isLoading) {
     return <Loader />;
@@ -40,48 +39,11 @@ export function Offer() {
         <section className="offer">
           <div className="offer__gallery-container container">
             <div className="offer__gallery">
-              <div className="offer__image-wrapper">
-                <img
-                  className="offer__image"
-                  src="img/room.jpg"
-                  alt="Photo studio"
-                />
-              </div>
-              <div className="offer__image-wrapper">
-                <img
-                  className="offer__image"
-                  src="img/apartment-01.jpg"
-                  alt="Photo studio"
-                />
-              </div>
-              <div className="offer__image-wrapper">
-                <img
-                  className="offer__image"
-                  src="img/apartment-02.jpg"
-                  alt="Photo studio"
-                />
-              </div>
-              <div className="offer__image-wrapper">
-                <img
-                  className="offer__image"
-                  src="img/apartment-03.jpg"
-                  alt="Photo studio"
-                />
-              </div>
-              <div className="offer__image-wrapper">
-                <img
-                  className="offer__image"
-                  src="img/studio-01.jpg"
-                  alt="Photo studio"
-                />
-              </div>
-              <div className="offer__image-wrapper">
-                <img
-                  className="offer__image"
-                  src="img/apartment-01.jpg"
-                  alt="Photo studio"
-                />
-              </div>
+              {offer.images.map((i) => (
+                <div key={i} className="offer__image-wrapper">
+                  <img className="offer__image" src={i} alt="Photo studio" />
+                </div>
+              ))}
             </div>
           </div>
           <div className="offer__container container">
@@ -113,13 +75,13 @@ export function Offer() {
               />
               <ul className="offer__features">
                 <li className="offer__feature offer__feature--entire">
-                  Apartment
+                  {offer.type}
                 </li>
                 <li className="offer__feature offer__feature--bedrooms">
-                  3 Bedrooms
+                  {offer.bedrooms} Bedrooms
                 </li>
                 <li className="offer__feature offer__feature--adults">
-                  Max 4 adults
+                  Max {offer.maxAdults} adults
                 </li>
               </ul>
               <div className="offer__price">
@@ -129,44 +91,37 @@ export function Offer() {
               <div className="offer__inside">
                 <h2 className="offer__inside-title">What&apos;s inside</h2>
                 <ul className="offer__inside-list">
-                  <li className="offer__inside-item">Wi-Fi</li>
-                  <li className="offer__inside-item">Washing machine</li>
-                  <li className="offer__inside-item">Towels</li>
-                  <li className="offer__inside-item">Heating</li>
-                  <li className="offer__inside-item">Coffee machine</li>
-                  <li className="offer__inside-item">Baby seat</li>
-                  <li className="offer__inside-item">Kitchen</li>
-                  <li className="offer__inside-item">Dishwasher</li>
-                  <li className="offer__inside-item">Cabel TV</li>
-                  <li className="offer__inside-item">Fridge</li>
+                  {offer.goods.map((g) => (
+                    <li key={g} className="offer__inside-item">
+                      {g}
+                    </li>
+                  ))}
                 </ul>
               </div>
               <div className="offer__host">
                 <h2 className="offer__host-title">Meet the host</h2>
                 <div className="offer__host-user user">
-                  <div className="offer__avatar-wrapper offer__avatar-wrapper--pro user__avatar-wrapper">
+                  <div
+                    className={classNames(
+                      'offer__avatar-wrapper user__avatar-wrapper',
+                      offer.host.isPro && 'offer__avatar-wrapper--pro'
+                    )}
+                  >
                     <img
                       className="offer__avatar user__avatar"
-                      src="img/avatar-angelina.jpg"
+                      src={offer.host.avatarUrl}
                       width={74}
                       height={74}
                       alt="Host avatar"
                     />
                   </div>
-                  <span className="offer__user-name">Angelina</span>
-                  <span className="offer__user-status">Pro</span>
+                  <span className="offer__user-name">{offer.host.name}</span>
+                  {offer.host.isPro && (
+                    <span className="offer__user-status">Pro</span>
+                  )}
                 </div>
                 <div className="offer__description">
-                  <p className="offer__text">
-                    A quiet cozy and picturesque that hides behind a a river by
-                    the unique lightness of Amsterdam. The building is green and
-                    from 18th century.
-                  </p>
-                  <p className="offer__text">
-                    An independent House, strategically located between Rembrand
-                    Square and National Opera, but where the bustle of the city
-                    comes to rest in this alley flowery and colorful.
-                  </p>
+                  <p className="offer__text">{offer.description}</p>
                 </div>
               </div>
               <Review
@@ -179,7 +134,10 @@ export function Offer() {
             className="offer__map"
             position={offer.location}
             currentMarker={offer.location}
-            markers={[offer.location, ...nearestOffers.map((o) => o.location)]}
+            markers={[
+              offer.location,
+              ...(nearestOffers ? nearestOffers.map((o) => o.location) : []),
+            ]}
           />
         </section>
         <div className="container">
@@ -188,13 +146,15 @@ export function Offer() {
               Other places in the neighbourhood
             </h2>
             <div className="near-places__list places__list">
-              {nearestOffers.map((o) => (
-                <Card
-                  key={o.id}
-                  offer={o}
-                  onClick={() => window.scrollTo(0, 0)}
-                />
-              ))}
+              {nearestOffers &&
+                nearestOffers.map((o) => (
+                  <Card
+                    key={o.id}
+                    offer={o}
+                    imageURL={o.previewImage}
+                    onClick={() => window.scrollTo(0, 0)}
+                  />
+                ))}
             </div>
           </section>
         </div>

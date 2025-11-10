@@ -18,7 +18,9 @@ export function Main() {
   const currentCity = useCurrentCity();
   const currentCityOffers = useMemo(
     () =>
-      currentCity ? offers.filter((o) => o.city.name === currentCity.name) : [],
+      currentCity && offers
+        ? offers.filter((o) => o.city.name === currentCity.name)
+        : [],
     [currentCity, offers]
   );
   const markers = useMemo(

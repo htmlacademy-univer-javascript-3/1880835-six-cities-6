@@ -37,24 +37,17 @@ function cardVariant(variant: CardVariant) {
 
 interface CardProps {
   offer: Offer;
+  imageURL: string;
   variant?: CardVariant;
   onClick?: (event: MouseEvent<HTMLElement>) => void;
   onMouseEnter?: (event: MouseEvent<HTMLElement>) => void;
 }
 export function Card({
   variant,
+  imageURL,
   onClick,
   onMouseEnter,
-  offer: {
-    id,
-    isFavorite,
-    isPremium,
-    previewImage,
-    price,
-    rating,
-    title,
-    type,
-  },
+  offer: { id, isFavorite, isPremium, price, rating, title, type },
 }: CardProps) {
   const variantInfo = useMemo(
     () => cardVariant(variant ?? 'cities'),
@@ -81,7 +74,7 @@ export function Card({
         <Link to={routes.offer({ id })}>
           <img
             className="place-card__image"
-            src={previewImage}
+            src={imageURL}
             width={variantInfo.image.width}
             height={variantInfo.image.height}
             alt="Place image"

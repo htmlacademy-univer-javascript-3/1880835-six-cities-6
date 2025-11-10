@@ -12,9 +12,9 @@ export function Favorites() {
     return <Loader />;
   }
 
-  if (isError) {
+  if (isError || offers === undefined) {
     // TODO: routes.error
-    <Navigate to={routes.notFound} />;
+    return <Navigate to={routes.notFound} />;
   }
 
   return (

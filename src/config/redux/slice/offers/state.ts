@@ -1,24 +1,16 @@
-import { Offer } from '../../../../domain/offer';
+import { OfferDetails, OfferMeta } from '../../../../domain/offer';
+import { ThunkQuery } from '../../thunk/types';
 
 interface OffersSliceState {
-  offers: {
-    data: Offer[];
-    isFetched: boolean;
-    isLoading: boolean;
-    isError: boolean;
-    error: null | Error;
-  };
+  offers?: ThunkQuery<OfferMeta[]>;
+  offer: Record<string, ThunkQuery<OfferDetails> | undefined>;
+  nearbyOffers: Record<string, ThunkQuery<OfferMeta[]> | undefined>;
 }
 
 const emptyState = (): OffersSliceState => ({
-  offers: {
-    data: [],
-    isFetched: false,
-    isLoading: false,
-    isError: false,
-    error: null,
-  },
+  offer: {},
+  nearbyOffers: {},
 });
 
 export { emptyState };
-export type { OffersSliceState as OffersSliceState };
+export type { OffersSliceState };

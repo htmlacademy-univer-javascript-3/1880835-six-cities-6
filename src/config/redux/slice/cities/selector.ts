@@ -1,6 +1,6 @@
 import { createSelector } from '@reduxjs/toolkit';
 import { State } from '../..';
-import { selectOffers, selectOffersState } from '../offers/selector';
+import { selectOffers, selectOffersQuery } from '../offers/selector';
 
 export const selectCitiesState = (s: State) => s.cities;
 
@@ -13,6 +13,11 @@ export const selectUniqueCities = createSelector([selectOffers], (offers) =>
 );
 
 export const selectCitiesQuery = createSelector(
-  [selectUniqueCities, selectOffersState],
-  (data, { isLoading, isError, error }) => ({ data, isLoading, isError, error })
+  [selectUniqueCities, selectOffersQuery],
+  (data, { isLoading, isError, error }) => ({
+    data,
+    isLoading,
+    isError,
+    error,
+  })
 );
