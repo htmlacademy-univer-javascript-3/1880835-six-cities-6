@@ -1,4 +1,4 @@
-import { Header } from '../layout/Header';
+import { Header } from '../domain/ui/layout/Header';
 
 export function Property() {
   return (

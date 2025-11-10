@@ -1,10 +1,23 @@
-import { Favorites as FavoritesView } from '../offer/components/Favorites';
-import { Header } from '../layout/Header';
-import { useSelector } from 'react-redux';
-import { selectOffers } from '../redux/selector';
+import { Favorites as FavoritesView } from '../domain/offer/components/Favorites';
+import { Header } from '../domain/ui/layout/Header';
+import { useOffersQuery } from '../domain/offer';
+import { Loader } from '../domain/ui/components/Loader';
+import { Navigate } from 'react-router-dom';
+import routes from '../domain/router/constants/ROUTES';
+import { setErrorMessage } from '../domain/error/features/setErrorMessage';
 
 export function Favorites() {
-  const offers = useSelector(selectOffers);
+  const { data: offers, isLoading, isError, error } = useOffersQuery();
+
+  if (isLoading) {
+    return <Loader />;
+  }
+
+  if (isError || offers === undefined) {
+    setErrorMessage(error);
+    return <Navigate to={routes.error} />;
+  }
+
   return (
     <div className="page">
       <Header />
