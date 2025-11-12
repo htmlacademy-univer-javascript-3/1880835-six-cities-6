@@ -3,13 +3,14 @@ import { AuthForm } from '../domain/auth/components/AuthForm';
 import { useAuthQuery } from '../domain/auth/hooks/useAuthQuery';
 import ROUTES from '../domain/router/constants/ROUTES';
 import { setErrorMessage } from '../domain/error/features/setErrorMessage';
-import { isLoginValidationError } from '../domain/auth/utils/isLoginValidationError';
+import { isValidationError } from '../config/redux/thunk';
+import { Loader } from '../domain/ui/components/Loader';
 
 export function Login() {
-  const { isFetched, isError, error } = useAuthQuery();
+  const { isLoading, isFetched, isError, error } = useAuthQuery();
 
   if (isError) {
-    if (isLoginValidationError(error)) {
+    if (isValidationError(error)) {
       // eslint-disable-next-line no-alert
       alert(`Login validation error: ${error?.cause?.message}`);
     } else {
@@ -45,7 +46,7 @@ export function Login() {
         <div className="page__login-container container">
           <section className="login">
             <h1 className="login__title">Sign in</h1>
-            <AuthForm />
+            {isLoading ? <Loader /> : <AuthForm />}
           </section>
           <section className="locations locations--login locations--current">
             <div className="locations__item">

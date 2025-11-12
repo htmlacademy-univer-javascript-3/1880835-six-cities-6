@@ -11,11 +11,11 @@ export function Favorites() {
   useAuthCheck();
   const { data: offers, isLoading, isError, error } = useOffersQuery();
 
-  if (isLoading) {
+  if (isLoading || offers === undefined) {
     return <Loader />;
   }
 
-  if (isError || offers === undefined) {
+  if (isError) {
     setErrorMessage(error?.cause?.message);
     return <Navigate to={routes.error} />;
   }

@@ -2,7 +2,9 @@ import { getEmptyQueryState } from './getEmptyQuery';
 import { RejectValue } from './types';
 
 export function getPendingState<T>() {
-  return getEmptyQueryState<T>();
+  const result = getEmptyQueryState<T>();
+  result.isLoading = true;
+  return result;
 }
 
 export function getFulfilledState<T>(payload: T) {

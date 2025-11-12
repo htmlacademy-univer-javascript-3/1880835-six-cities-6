@@ -9,8 +9,8 @@ import {
   getRejectValue,
   serializeError,
 } from '../../thunk';
-import ERROR_TYPES from './constants/ERROR_TYPES';
 import HTTP_STATUS from '../../../axios/constants/HTTP_STATUS';
+import ERROR_TYPES from '../../thunk/constants/ERROR_TYPES';
 
 export const signOutThunk = createAppAsyncThunk<void>(
   ACTION_NAMES.signOut,
@@ -35,7 +35,7 @@ export const checkLoginThunk = createAppAsyncThunk<Auth | undefined>(
       ) {
         dispatch(signOutThunk());
         return rejectWithValue({
-          type: ERROR_TYPES.loginCheckFailed,
+          type: ERROR_TYPES.unauthorized,
           cause: serializeError(error),
         });
       } else {
@@ -65,7 +65,7 @@ export const loginThunk = createAppAsyncThunk<Auth, Credentials>(
         error.response.status === HTTP_STATUS.validationError
       ) {
         return rejectWithValue({
-          type: ERROR_TYPES.loginValidationError,
+          type: ERROR_TYPES.validationFailed,
           cause: {
             message: (error.response.data as ValidationErrorResponse).details
               .map((d) => d.messages.join())

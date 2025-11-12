@@ -24,7 +24,7 @@ export function Offer() {
       limit: 3,
     });
 
-  if (isLoading) {
+  if (isLoading || offer === undefined) {
     return <Loader />;
   }
 
@@ -35,10 +35,6 @@ export function Offer() {
       setErrorMessage(error?.cause?.message);
       return <Navigate to={routes.error} />;
     }
-  }
-
-  if (offer === undefined) {
-    return <Navigate to={routes.notFound} />;
   }
 
   return (

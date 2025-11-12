@@ -42,7 +42,7 @@ export function CommentsSection({
         Reviews · <span className="reviews__amount">{comments.length}</span>
       </h2>
       <CommentsList comments={comments} />
-      {authStatus && <CommentForm />}
+      {authStatus && <CommentForm offerId={offerID} />}
     </section>
   );
 }
