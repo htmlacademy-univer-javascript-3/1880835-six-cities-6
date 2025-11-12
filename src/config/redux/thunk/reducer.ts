@@ -1,23 +1,22 @@
-import { ThunkQuery } from './types';
+import { getEmptyQueryState } from './getEmptyQuery';
 
-export function setPendingState<T>(state: ThunkQuery<T>) {
-  state.isFetched = false;
-  state.isLoading = true;
-  state.error = null;
-  return state;
+export function getPendingState<T>() {
+  return getEmptyQueryState<T>();
 }
 
-export function setFulfilledState<T>(state: ThunkQuery<T>, payload: T) {
-  state.data = payload;
-  state.isFetched = true;
-  state.isLoading = false;
-  return state;
+export function getFulfilledState<T>(payload: T) {
+  const result = getEmptyQueryState<T>();
+  result.data = payload;
+  result.isFetched = true;
+  result.isLoading = false;
+  return result;
 }
 
-export function setRejectedState<T>(state: ThunkQuery<T>, payload?: string) {
-  state.isFetched = true;
-  state.isLoading = false;
-  state.isError = true;
-  state.error = payload;
-  return state;
+export function getRejectedState<T>(payload: string | undefined) {
+  const result = getEmptyQueryState<T>();
+  result.error = payload;
+  result.isLoading = false;
+  result.isFetched = true;
+  result.isError = true;
+  return result;
 }

@@ -1,9 +1,20 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import routes from '../../router/constants/ROUTES';
-import { useAuthStatus } from '../../auth/hooks/useAuth';
+import { useAuthStatus } from '../../auth/hooks/useAuthStatus';
+import { preventDefault } from '../../../utils/event';
+import { signOut } from '../../auth/features/signOut';
+import ROUTES from '../../router/constants/ROUTES';
+import { useAuthQuery } from '../../auth/hooks/useAuthQuery';
 
 export function Header() {
+  const { data } = useAuthQuery();
   const isAuth = useAuthStatus();
+  const navigate = useNavigate();
+
+  const onSignOut = preventDefault(() => {
+    signOut();
+    navigate(ROUTES.login);
+  });
 
   return (
     <header className="header">
@@ -33,13 +44,15 @@ export function Header() {
                   >
                     <div className="header__avatar-wrapper user__avatar-wrapper"></div>
                     <span className="header__user-name user__name">
-                      Oliver.conner@gmail.com
+                      {data?.email}
                     </span>
-                    <span className="header__favorite-count">3</span>
+                    <span className="header__favorite-count">
+                      {3 /* TODO: favorite count */}
+                    </span>
                   </Link>
                 </li>
                 <li className="header__nav-item">
-                  <a className="header__nav-link" href="#">
+                  <a className="header__nav-link" onClick={onSignOut}>
                     <span className="header__signout">Sign out</span>
                   </a>
                 </li>
@@ -47,13 +60,13 @@ export function Header() {
             ) : (
               <ul className="header__nav-list">
                 <li className="header__nav-item user">
-                  <a
+                  <Link
                     className="header__nav-link header__nav-link--profile"
-                    href="#"
+                    to={routes.login}
                   >
                     <div className="header__avatar-wrapper user__avatar-wrapper"></div>
                     <span className="header__login">Sign in</span>
-                  </a>
+                  </Link>
                 </li>
               </ul>
             )}

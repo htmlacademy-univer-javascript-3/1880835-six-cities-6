@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useAppDispatch } from '../../../config/redux/hooks/useAppDispatch';
-import { fetchOfferComments } from '../../../config/redux/slice/comments/action';
+import { offerCommentsThunk } from '../../../config/redux/slice/comments/action';
 import { useSelector } from 'react-redux';
 import { State } from '../../../config/redux';
 import { selectOfferCommentsQuery } from '../../../config/redux/slice/comments/selector';
@@ -12,7 +12,7 @@ export function useOfferCommentsQuery(
 ): ThunkQuery<PostedComment[]> {
   const dispatch = useAppDispatch();
   useEffect(() => {
-    dispatch(fetchOfferComments(offerID));
+    dispatch(offerCommentsThunk(offerID));
   }, [offerID, dispatch]);
   return useSelector((s: State) => selectOfferCommentsQuery(s, offerID));
 }

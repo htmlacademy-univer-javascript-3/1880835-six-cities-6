@@ -11,8 +11,10 @@ import { Loader } from '../domain/ui/components/Loader';
 import { useOfferQuery } from '../domain/offer/hooks/useOfferQuery';
 import { useNearbyOffersQuery } from '../domain/offer/hooks/useNearbyOffersQuery';
 import { setErrorMessage } from '../domain/error/features/setErrorMessage';
+import { useAuthCheck } from '../domain/auth/hooks/useAuthCheck';
 
 export function Offer() {
+  useAuthCheck();
   const { id } = useParams<{ id: string }>();
   const { data: offer, isLoading, isError, error } = useOfferQuery(id);
   const { data: nearestOffers } = useNearbyOffersQuery({

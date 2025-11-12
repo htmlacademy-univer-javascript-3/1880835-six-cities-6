@@ -1,14 +1,13 @@
-import { createAsyncThunk } from '@reduxjs/toolkit';
 import { PostedComment } from '../../../../domain/comment';
-import { ThunkConfig } from '../../thunk';
+import { createAppAsyncThunk } from '../../thunk';
 import { ENDPOINTS } from '../../../axios';
+import ACTION_NAMES from './constants/ACTION_NAMES';
 
-export const fetchOfferComments = createAsyncThunk<
+export const offerCommentsThunk = createAppAsyncThunk<
   PostedComment[],
-  string | undefined,
-  ThunkConfig
+  string | undefined
 >(
-  ENDPOINTS.comments('unique'),
+  ACTION_NAMES.offerComments,
   async (offerID: string | undefined, { rejectWithValue, extra: { api } }) => {
     try {
       return (

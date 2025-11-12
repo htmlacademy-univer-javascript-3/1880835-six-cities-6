@@ -1,14 +1,13 @@
 import { createSlice } from '@reduxjs/toolkit';
 import SLICE_NAMES from '../../constants/SLICE_NAMES';
-import { fetchNearbyOffers, fetchOffer, fetchOffers } from './action';
+import { nearbyOffersThunk, offerThunk, offersThunk } from './action';
 import { emptyState } from './state';
 import { ThunkQuery } from '../../thunk/types';
-import { Offer, OfferMeta } from '../../../../domain/offer';
+import { OfferMeta } from '../../../../domain/offer';
 import {
-  getEmptyQueryState,
-  setFulfilledState,
-  setPendingState,
-  setRejectedState,
+  getFulfilledState,
+  getPendingState,
+  getRejectedState,
 } from '../../thunk';
 
 export const offersSlice = createSlice({
@@ -17,46 +16,34 @@ export const offersSlice = createSlice({
   reducers: {},
   extraReducers: (builder) =>
     builder
-      .addCase(fetchOffers.pending, (s) => {
-        s.offers = setPendingState(getEmptyQueryState<OfferMeta[]>());
+      .addCase(offersThunk.pending, (s) => {
+        s.offers = getPendingState();
       })
-      .addCase(fetchOffers.fulfilled, (s, a) => {
-        setFulfilledState(s.offers as ThunkQuery<OfferMeta[]>, a.payload);
+      .addCase(offersThunk.fulfilled, (s, a) => {
+        s.offers = getFulfilledState(a.payload);
       })
-      .addCase(fetchOffers.rejected, (s, a) => {
-        setRejectedState(s.offers as ThunkQuery<OfferMeta[]>, a.payload);
+      .addCase(offersThunk.rejected, (s, a) => {
+        s.offers = getRejectedState(a.payload);
       })
-      .addCase(fetchOffer.pending, (s, a) => {
-        s.offer[a.meta.arg as string] = setPendingState(getEmptyQueryState());
+      .addCase(offerThunk.pending, (s, a) => {
+        s.offer[a.meta.arg as string] = getPendingState();
       })
-      .addCase(fetchOffer.fulfilled, (s, a) => {
-        setFulfilledState(
-          s.offer[a.meta.arg as string] as ThunkQuery<Offer>,
-          a.payload
+      .addCase(offerThunk.fulfilled, (s, a) => {
+        s.offer[a.meta.arg as string] = getFulfilledState(a.payload);
+      })
+      .addCase(offerThunk.rejected, (s, a) => {
+        s.offer[a.meta.arg as string] = getRejectedState(a.payload);
+      })
+      .addCase(nearbyOffersThunk.pending, (s, a) => {
+        s.nearbyOffers[a.meta.arg as string] = getPendingState();
+      })
+      .addCase(nearbyOffersThunk.fulfilled, (s, a) => {
+        getFulfilledState(
+          s.nearbyOffers[a.meta.arg as string] as ThunkQuery<OfferMeta[]>
         );
       })
-      .addCase(fetchOffer.rejected, (s, a) => {
-        setRejectedState(
-          s.offer[a.meta.arg as string] as ThunkQuery<Offer>,
-          a.payload
-        );
-      })
-      .addCase(fetchNearbyOffers.pending, (s, a) => {
-        s.nearbyOffers[a.meta.arg as string] = setPendingState(
-          getEmptyQueryState()
-        );
-      })
-      .addCase(fetchNearbyOffers.fulfilled, (s, a) => {
-        setFulfilledState(
-          s.nearbyOffers[a.meta.arg as string] as ThunkQuery<OfferMeta[]>,
-          a.payload
-        );
-      })
-      .addCase(fetchNearbyOffers.rejected, (s, a) => {
-        setRejectedState(
-          s.nearbyOffers[a.meta.arg as string] as ThunkQuery<OfferMeta[]>,
-          a.payload
-        );
+      .addCase(nearbyOffersThunk.rejected, (s, a) => {
+        s.nearbyOffers[a.meta.arg as string] = getRejectedState(a.payload);
       }),
 });
 
