@@ -38,9 +38,7 @@ export const offersSlice = createSlice({
         s.nearbyOffers[a.meta.arg as string] = getPendingState();
       })
       .addCase(nearbyOffersThunk.fulfilled, (s, a) => {
-        getFulfilledState(
-          s.nearbyOffers[a.meta.arg as string] as ThunkQuery<OfferMeta[]>
-        );
+        s.nearbyOffers[a.meta.arg as string] = getFulfilledState(a.payload);
       })
       .addCase(nearbyOffersThunk.rejected, (s, a) => {
         s.nearbyOffers[a.meta.arg as string] = getRejectedState(a.payload);
