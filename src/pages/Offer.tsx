@@ -17,10 +17,11 @@ export function Offer() {
   useAuthCheck();
   const { id } = useParams<{ id: string }>();
   const { data: offer, isLoading, isError, error } = useOfferQuery(id);
-  const { data: nearestOffers } = useNearbyOffersQuery({
-    offerID: id,
-    limit: 3,
-  });
+  const { data: nearestOffers, isLoading: isNearestOffersLoading } =
+    useNearbyOffersQuery({
+      offerID: id,
+      limit: 3,
+    });
 
   if (isLoading) {
     return <Loader />;
@@ -146,7 +147,9 @@ export function Offer() {
               Other places in the neighbourhood
             </h2>
             <div className="near-places__list places__list">
-              {nearestOffers &&
+              {isNearestOffersLoading ? (
+                <Loader />
+              ) : (
                 nearestOffers.map((o) => (
                   <Card
                     key={o.id}
@@ -154,7 +157,8 @@ export function Offer() {
                     imageURL={o.previewImage}
                     onClick={() => window.scrollTo(0, 0)}
                   />
-                ))}
+                ))
+              )}
             </div>
           </section>
         </div>
