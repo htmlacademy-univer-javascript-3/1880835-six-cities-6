@@ -1,5 +1,5 @@
 import { Navigate, useParams } from 'react-router-dom';
-import { Header } from '../domain/ui/layout/Header';
+import { Header } from '../domain/ui/components/Header';
 import routes from '../domain/router/constants/ROUTES';
 import { Card } from '../domain/offer/components/Card/Card';
 import classNames from 'classnames';
@@ -11,8 +11,10 @@ import { Loader } from '../domain/ui/components/Loader';
 import { useOfferQuery } from '../domain/offer/hooks/useOfferQuery';
 import { useNearbyOffersQuery } from '../domain/offer/hooks/useNearbyOffersQuery';
 import { setErrorMessage } from '../domain/error/features/setErrorMessage';
+import { useAuthCheck } from '../domain/auth/hooks/useAuthCheck';
 
 export function Offer() {
+  useAuthCheck();
   const { id } = useParams<{ id: string }>();
   const { data: offer, isLoading, isError, error } = useOfferQuery(id);
   const { data: nearestOffers } = useNearbyOffersQuery({

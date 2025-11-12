@@ -1,6 +1,6 @@
 import { useSelector } from 'react-redux';
 import { useAppDispatch } from '../../../config/redux/hooks/useAppDispatch';
-import { fetchNearbyOffers } from '../../../config/redux/slice/offers';
+import { nearbyOffersThunk } from '../../../config/redux/slice/offers';
 import { selectNearbyOffers } from '../../../config/redux/slice/offers/selector';
 import { ThunkQuery } from '../../../config/redux/thunk/types';
 import { OfferMeta } from '../types';
@@ -16,7 +16,7 @@ export function useNearbyOffersQuery({
 }) {
   const dispatch = useAppDispatch();
   useEffect(() => {
-    dispatch(fetchNearbyOffers(offerID));
+    dispatch(nearbyOffersThunk(offerID));
   }, [dispatch, offerID]);
   const { data, isError, isFetched, isLoading, error } = useSelector<
     State,

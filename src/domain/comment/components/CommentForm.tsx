@@ -1,6 +1,7 @@
-import { useState, ChangeEvent } from 'react';
+import { useState } from 'react';
 import { Input as RatingInput } from '../../rating/components/Input';
 import { Comment } from '../types';
+import { createOnChangeHandler } from '../../../utils/react/form/createOnChangeHandler';
 
 export function CommentForm({
   feedback = {
@@ -12,28 +13,18 @@ export function CommentForm({
 }) {
   const [feedbackState, setFeedbackState] = useState<Comment>(feedback);
 
-  const onChange = ({
-    target,
-  }: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    switch (target.getAttribute('name')) {
-      case 'review':
-        setFeedbackState({ ...feedbackState, text: target.value });
-        break;
-      case 'rating':
+  const onChange = createOnChangeHandler((builder) =>
+    builder
+      .addCase('review', (value) =>
+        setFeedbackState({ ...feedbackState, text: value })
+      )
+      .addCase('rating', (value) =>
         setFeedbackState({
           ...feedbackState,
-          rating: parseInt(target.value, 10),
-        });
-        break;
-      default:
-        throw new Error(
-          `Не удалось обработать элемент с name: ${target.getAttribute(
-            'name'
-          )}`,
-          { cause: target }
-        );
-    }
-  };
+          rating: parseInt(value, 10),
+        })
+      )
+  );
 
   return (
     <form className="reviews__form form" action="#" method="post">

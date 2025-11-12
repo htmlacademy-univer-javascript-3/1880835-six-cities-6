@@ -1,10 +1,10 @@
-import { createAsyncThunk } from '@reduxjs/toolkit';
 import { ENDPOINTS } from '../../../axios';
 import { OfferDetails, OfferMeta } from '../../../../domain/offer';
-import { ThunkConfig } from '../../thunk/types';
+import { createAppAsyncThunk } from '../../thunk';
+import ACTION_NAMES from './constants/ACTION_NAMES';
 
-export const fetchOffers = createAsyncThunk<OfferMeta[], void, ThunkConfig>(
-  ENDPOINTS.offers,
+export const offersThunk = createAppAsyncThunk<OfferMeta[]>(
+  ACTION_NAMES.offers,
   async (_: void, { rejectWithValue, extra: { api } }) => {
     try {
       return (await api.get<OfferMeta[]>(ENDPOINTS.offers)).data;
@@ -22,12 +22,8 @@ export const fetchOffers = createAsyncThunk<OfferMeta[], void, ThunkConfig>(
   }
 );
 
-export const fetchOffer = createAsyncThunk<
-  OfferDetails,
-  string | undefined,
-  ThunkConfig
->(
-  ENDPOINTS.offer('unique'),
+export const offerThunk = createAppAsyncThunk<OfferDetails, string | undefined>(
+  ACTION_NAMES.offer,
   async (offerID: string | undefined, { rejectWithValue, extra: { api } }) => {
     try {
       return (await api.get<OfferDetails>(ENDPOINTS.offer(offerID as string)))
@@ -50,12 +46,11 @@ export const fetchOffer = createAsyncThunk<
   }
 );
 
-export const fetchNearbyOffers = createAsyncThunk<
+export const nearbyOffersThunk = createAppAsyncThunk<
   OfferMeta[],
-  string | undefined,
-  ThunkConfig
+  string | undefined
 >(
-  ENDPOINTS.nearbyOffers('unique'),
+  ACTION_NAMES.nearbyOffers,
   async (offerID: string | undefined, { rejectWithValue, extra: { api } }) => {
     try {
       return (

@@ -1,12 +1,14 @@
 import { Favorites as FavoritesView } from '../domain/offer/components/Favorites';
-import { Header } from '../domain/ui/layout/Header';
+import { Header } from '../domain/ui/components/Header';
 import { useOffersQuery } from '../domain/offer';
 import { Loader } from '../domain/ui/components/Loader';
 import { Navigate } from 'react-router-dom';
 import routes from '../domain/router/constants/ROUTES';
 import { setErrorMessage } from '../domain/error/features/setErrorMessage';
+import { useAuthCheck } from '../domain/auth/hooks/useAuthCheck';
 
 export function Favorites() {
+  useAuthCheck();
   const { data: offers, isLoading, isError, error } = useOffersQuery();
 
   if (isLoading) {
