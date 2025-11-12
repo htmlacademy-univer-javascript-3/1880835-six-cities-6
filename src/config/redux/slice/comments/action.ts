@@ -1,5 +1,5 @@
 import { PostedComment } from '../../../../domain/comment';
-import { createAppAsyncThunk } from '../../thunk';
+import { createAppAsyncThunk, getRejectValue } from '../../thunk';
 import { ENDPOINTS } from '../../../axios';
 import ACTION_NAMES from './constants/ACTION_NAMES';
 
@@ -14,9 +14,7 @@ export const offerCommentsThunk = createAppAsyncThunk<
         await api.get<PostedComment[]>(ENDPOINTS.comments(offerID as string))
       ).data;
     } catch (error) {
-      return rejectWithValue(
-        `Не удалось получить список комментариев для предложения ${offerID}`
-      );
+      return rejectWithValue(getRejectValue(error));
     }
   },
   {

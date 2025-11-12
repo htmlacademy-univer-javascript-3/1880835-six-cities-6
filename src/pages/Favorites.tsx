@@ -16,7 +16,7 @@ export function Favorites() {
   }
 
   if (isError || offers === undefined) {
-    setErrorMessage(error);
+    setErrorMessage(error?.cause?.message);
     return <Navigate to={routes.error} />;
   }
 

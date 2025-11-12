@@ -9,7 +9,7 @@ export function Login() {
 
   // FIXME: isLoading state
   if (isError) {
-    setErrorMessage(error);
+    setErrorMessage(error?.cause?.message);
     return <Navigate to={ROUTES.error} />;
   }
 

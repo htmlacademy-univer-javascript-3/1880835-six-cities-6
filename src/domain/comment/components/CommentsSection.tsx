@@ -31,7 +31,7 @@ export function CommentsSection({
   }
 
   if (isError || comments === undefined) {
-    return <Section>{error ?? 'Comments get error'}</Section>;
+    return <Section>{error?.cause?.message ?? 'Comments get error'}</Section>;
   }
 
   return (

@@ -1,6 +1,6 @@
 import { ENDPOINTS } from '../../../axios';
 import { OfferDetails, OfferMeta } from '../../../../domain/offer';
-import { createAppAsyncThunk } from '../../thunk';
+import { createAppAsyncThunk, getRejectValue } from '../../thunk';
 import ACTION_NAMES from './constants/ACTION_NAMES';
 
 export const offersThunk = createAppAsyncThunk<OfferMeta[]>(
@@ -9,7 +9,7 @@ export const offersThunk = createAppAsyncThunk<OfferMeta[]>(
     try {
       return (await api.get<OfferMeta[]>(ENDPOINTS.offers)).data;
     } catch (error) {
-      return rejectWithValue('Не удалось получить список предложения');
+      return rejectWithValue(getRejectValue(error));
     }
   },
   {
@@ -29,7 +29,7 @@ export const offerThunk = createAppAsyncThunk<OfferDetails, string | undefined>(
       return (await api.get<OfferDetails>(ENDPOINTS.offer(offerID as string)))
         .data;
     } catch (error) {
-      return rejectWithValue(`Не удалось получить предложение с id ${offerID}`);
+      return rejectWithValue(getRejectValue(error));
     }
   },
   {
@@ -57,9 +57,7 @@ export const nearbyOffersThunk = createAppAsyncThunk<
         await api.get<OfferMeta[]>(ENDPOINTS.nearbyOffers(offerID as string))
       ).data;
     } catch (error) {
-      return rejectWithValue(
-        `Не удалось получить ближайшие предложения для id ${offerID}`
-      );
+      return rejectWithValue(getRejectValue(error));
     }
   },
   {

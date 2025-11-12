@@ -2,8 +2,6 @@ import { createSlice } from '@reduxjs/toolkit';
 import SLICE_NAMES from '../../constants/SLICE_NAMES';
 import { nearbyOffersThunk, offerThunk, offersThunk } from './action';
 import { emptyState } from './state';
-import { ThunkQuery } from '../../thunk/types';
-import { OfferMeta } from '../../../../domain/offer';
 import {
   getFulfilledState,
   getPendingState,
