@@ -1,7 +1,7 @@
 import { createSelector } from '@reduxjs/toolkit';
 import { State } from '../..';
 import { OfferDetails, OfferMeta } from '../../../../domain/offer';
-import { getEmptyQueryState } from '../../thunk';
+import { getEmptyQueryState, ThunkQuery } from '../../thunk';
 
 export const selectOffersState = (s: State) => s.offers;
 
@@ -21,7 +21,7 @@ export const selectOfferQuery = createSelector(
   [selectOfferState, (_state, offerID: string | undefined) => offerID],
   (offerState, offerID) =>
     offerID && offerState[offerID]
-      ? offerState[offerID]
+      ? (offerState[offerID] as ThunkQuery<OfferDetails>)
       : getEmptyQueryState<OfferDetails>()
 );
 
@@ -31,6 +31,6 @@ export const selectNearbyOffers = createSelector(
   [selectNearbyOffersState, (_state, offerID: string | undefined) => offerID],
   (nearbyOffersState, offerID) =>
     offerID && nearbyOffersState[offerID]
-      ? nearbyOffersState[offerID]
+      ? (nearbyOffersState[offerID] as ThunkQuery<OfferMeta[]>)
       : getEmptyQueryState<OfferMeta[]>()
 );
