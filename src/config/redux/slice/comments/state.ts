@@ -1,12 +1,14 @@
 import { PostedComment } from '../../../../domain/comment';
-import { ThunkQuery } from '../../thunk';
+import { getEmptyQueryState, ThunkQuery } from '../../thunk';
 
 export interface CommentsSliceState {
   offerComments: Record<string, ThunkQuery<PostedComment[]> | undefined>;
+  commentPost: ThunkQuery<PostedComment>;
 }
 
 export function getEmptyState(): CommentsSliceState {
   return {
     offerComments: {},
+    commentPost: getEmptyQueryState<PostedComment>(),
   };
 }

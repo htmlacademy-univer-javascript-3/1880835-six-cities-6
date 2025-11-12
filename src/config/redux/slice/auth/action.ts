@@ -1,10 +1,16 @@
 import { Auth, Credentials } from '../../../../domain/auth/types';
-import { ENDPOINTS } from '../../../axios';
+import { ENDPOINTS, ValidationErrorResponse } from '../../../axios';
 import { selectAuthState, selectAuthToken } from './selector';
 import { resetStateAction } from '../../utils/resetState';
 import { AxiosError } from 'axios';
 import ACTION_NAMES from './constants/ACTION_NAMES';
-import { createAppAsyncThunk } from '../../thunk';
+import {
+  createAppAsyncThunk,
+  getRejectValue,
+  serializeError,
+} from '../../thunk';
+import HTTP_STATUS from '../../../axios/constants/HTTP_STATUS';
+import ERROR_TYPES from '../../thunk/constants/ERROR_TYPES';
 
 export const signOutThunk = createAppAsyncThunk<void>(
   ACTION_NAMES.signOut,
@@ -23,13 +29,17 @@ export const checkLoginThunk = createAppAsyncThunk<Auth | undefined>(
     try {
       return (await api.get<Auth>(ENDPOINTS.login)).data;
     } catch (error) {
-      if (error instanceof AxiosError && error.status === 401) {
+      if (
+        error instanceof AxiosError &&
+        error.response?.status === HTTP_STATUS.unauthorized
+      ) {
         dispatch(signOutThunk());
-      }
-      if (error instanceof Error) {
-        return rejectWithValue(error.message);
+        return rejectWithValue({
+          type: ERROR_TYPES.unauthorized,
+          cause: serializeError(error),
+        });
       } else {
-        return rejectWithValue(JSON.stringify(error));
+        return rejectWithValue(getRejectValue(error));
       }
     }
   },
@@ -49,10 +59,21 @@ export const loginThunk = createAppAsyncThunk<Auth, Credentials>(
       dispatch(resetStateAction());
       return data;
     } catch (error) {
-      if (error instanceof Error) {
-        return rejectWithValue(error.message);
+      if (
+        error instanceof AxiosError &&
+        error.response &&
+        error.response.status === HTTP_STATUS.validationError
+      ) {
+        return rejectWithValue({
+          type: ERROR_TYPES.validationFailed,
+          cause: {
+            message: (error.response.data as ValidationErrorResponse).details
+              .map((d) => d.messages.join())
+              .join('\n'),
+          },
+        });
       } else {
-        return rejectWithValue(JSON.stringify(error));
+        return rejectWithValue(getRejectValue(error));
       }
     }
   }

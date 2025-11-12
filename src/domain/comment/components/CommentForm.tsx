@@ -2,42 +2,73 @@ import { useState } from 'react';
 import { Input as RatingInput } from '../../rating/components/Input';
 import { Comment } from '../types';
 import { createOnChangeHandler } from '../../../utils/react/form/createOnChangeHandler';
+import { postComment } from '../features/postComment';
+import { preventDefault } from '../../../utils/event';
+import { useCommentPostQuery } from '../hooks/useCommentPostQuery';
+import {
+  isNotFoundError,
+  isUnauthorizedError,
+  isValidationError,
+} from '../../../config/redux/thunk';
+import { Navigate } from 'react-router-dom';
+import ROUTES from '../../router/constants/ROUTES';
+import { resetCommentPostQuery } from '../features/resetCommentPostQuery';
 
-export function CommentForm({
-  feedback = {
-    rating: 0,
-    text: '',
-  },
-}: {
-  feedback?: Comment;
-}) {
-  const [feedbackState, setFeedbackState] = useState<Comment>(feedback);
+const getEmptyCommentState = (): Partial<Comment> => ({ comment: '' });
+
+export function CommentForm({ offerId }: { offerId?: string }) {
+  const [comment, setComment] = useState<Partial<Comment>>(
+    getEmptyCommentState()
+  );
+  const { isLoading, isError, error } = useCommentPostQuery();
 
   const onChange = createOnChangeHandler((builder) =>
     builder
-      .addCase('review', (value) =>
-        setFeedbackState({ ...feedbackState, text: value })
-      )
+      .addCase('review', (value) => setComment({ ...comment, comment: value }))
       .addCase('rating', (value) =>
-        setFeedbackState({
-          ...feedbackState,
+        setComment({
+          ...comment,
           rating: parseInt(value, 10),
         })
       )
   );
+
+  const onSubmit = preventDefault(() => {
+    if ([offerId, comment.comment, comment.rating].includes(undefined)) {
+      throw new Error('Invalid form state');
+    } else {
+      postComment({
+        offerId: offerId as string,
+        comment: comment as Comment,
+      });
+      setComment(getEmptyCommentState());
+    }
+  });
+
+  if (isError) {
+    if (isValidationError(error)) {
+      // eslint-disable-next-line no-alert
+      alert(`Validation error: ${error?.cause?.message}`);
+      resetCommentPostQuery();
+    } else if (isUnauthorizedError(error)) {
+      return <Navigate to={ROUTES.login} />;
+    } else if (isNotFoundError(error)) {
+      return <Navigate to={ROUTES.notFound} />;
+    }
+  }
 
   return (
     <form className="reviews__form form" action="#" method="post">
       <label className="reviews__label form__label" htmlFor="review">
         Your review
       </label>
-      <RatingInput rating={feedbackState.rating} onChange={onChange} />
+      <RatingInput rating={comment.rating} onChange={onChange} />
       <textarea
         className="reviews__textarea form__textarea"
         id="review"
         name="review"
         placeholder="Tell how was your stay, what you like and what can be improved"
-        value={feedbackState.text}
+        value={comment.comment}
         onChange={onChange}
       />
       <div className="reviews__button-wrapper">
@@ -49,7 +80,14 @@ export function CommentForm({
         <button
           className="reviews__submit form__submit button"
           type="submit"
-          disabled
+          onClick={onSubmit}
+          disabled={
+            offerId === undefined ||
+            comment.comment === undefined ||
+            comment.comment.length < 50 ||
+            comment.rating === undefined ||
+            isLoading
+          }
         >
           Submit
         </button>
