@@ -8,6 +8,7 @@ import {
   getPendingState,
   getRejectedState,
 } from '../../thunk';
+import { PostedComment } from '../../../../domain/comment';
 
 export const commentsSlice = createSlice({
   name: SLICE_NAMES.comments,
@@ -34,12 +35,14 @@ export const commentsSlice = createSlice({
       .addCase(postCommentThunk.fulfilled, (s, a) => {
         const { offerId } = a.meta.arg as { offerId: string };
         s.commentPost = getFulfilledState(a.payload);
-        if (s.offerComments[offerId] === undefined) {
-          s.offerComments[offerId] = getEmptyQueryState();
-          s.offerComments[offerId].data = [a.payload];
+        const currentOfferComments = s.offerComments[offerId];
+        if (currentOfferComments === undefined) {
+          const state = getEmptyQueryState<PostedComment[]>();
+          state.data = [a.payload];
+          s.offerComments[offerId] = state;
         } else {
-          s.offerComments[offerId].data = s.offerComments[offerId].data
-            ? [...s.offerComments[offerId].data, a.payload]
+          currentOfferComments.data = currentOfferComments.data
+            ? [...currentOfferComments.data, a.payload]
             : [a.payload];
         }
       })
