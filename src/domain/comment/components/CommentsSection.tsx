@@ -4,6 +4,7 @@ import { CommentsList } from './CommentsList';
 import { useOfferCommentsQuery } from '../hooks/useOfferCommentsQuery';
 import { Loader } from '../../ui/components/Loader';
 import { ReactNode } from 'react';
+import { useAuthStatus } from '../../auth';
 
 export function CommentsSection({
   offerID,
@@ -12,6 +13,7 @@ export function CommentsSection({
   offerID?: string;
   className?: string;
 }) {
+  const authStatus = useAuthStatus();
   const {
     data: comments,
     isLoading,
@@ -40,7 +42,7 @@ export function CommentsSection({
         Reviews · <span className="reviews__amount">{comments.length}</span>
       </h2>
       <CommentsList comments={comments} />
-      <CommentForm />
+      {authStatus && <CommentForm />}
     </section>
   );
 }
