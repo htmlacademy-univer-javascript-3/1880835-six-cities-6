@@ -17,3 +17,5 @@ api.interceptors.request.use(async (config) => {
 });
 
 export { ENDPOINTS, api };
+
+export type * from './types.ts';

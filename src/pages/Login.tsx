@@ -3,17 +3,22 @@ import { AuthForm } from '../domain/auth/components/AuthForm';
 import { useAuthQuery } from '../domain/auth/hooks/useAuthQuery';
 import ROUTES from '../domain/router/constants/ROUTES';
 import { setErrorMessage } from '../domain/error/features/setErrorMessage';
+import { isLoginValidationError } from '../domain/auth/utils/isLoginValidationError';
 
 export function Login() {
   const { isFetched, isError, error } = useAuthQuery();
 
-  // FIXME: isLoading state
   if (isError) {
-    setErrorMessage(error?.cause?.message);
-    return <Navigate to={ROUTES.error} />;
+    if (isLoginValidationError(error)) {
+      // eslint-disable-next-line no-alert
+      alert(`Login validation error: ${error?.cause?.message}`);
+    } else {
+      setErrorMessage(error?.cause?.message);
+      return <Navigate to={ROUTES.error} />;
+    }
   }
 
-  if (isFetched) {
+  if (isFetched && !isError) {
     return <Navigate to={ROUTES.cities} />;
   }
 

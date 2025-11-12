@@ -1,5 +1,5 @@
 import { Auth, Credentials } from '../../../../domain/auth/types';
-import { ENDPOINTS } from '../../../axios';
+import { ENDPOINTS, ValidationErrorResponse } from '../../../axios';
 import { selectAuthState, selectAuthToken } from './selector';
 import { resetStateAction } from '../../utils/resetState';
 import { AxiosError } from 'axios';
@@ -28,7 +28,7 @@ export const checkLoginThunk = createAppAsyncThunk<Auth | undefined>(
     try {
       return (await api.get<Auth>(ENDPOINTS.login)).data;
     } catch (error) {
-      if (error instanceof AxiosError && error.status === 401) {
+      if (error instanceof AxiosError && error.response?.status === 401) {
         dispatch(signOutThunk());
         return rejectWithValue({
           type: ERROR_TYPES.loginCheckFailed,
@@ -55,10 +55,18 @@ export const loginThunk = createAppAsyncThunk<Auth, Credentials>(
       dispatch(resetStateAction());
       return data;
     } catch (error) {
-      if (error instanceof AxiosError && error.status === 400) {
+      if (
+        error instanceof AxiosError &&
+        error.response &&
+        error.response.status === 400
+      ) {
         return rejectWithValue({
           type: ERROR_TYPES.loginValidationError,
-          cause: serializeError(error),
+          cause: {
+            message: (error.response.data as ValidationErrorResponse).details
+              .map((d) => d.messages.join())
+              .join('\n'),
+          },
         });
       } else {
         return rejectWithValue(getRejectValue(error));
