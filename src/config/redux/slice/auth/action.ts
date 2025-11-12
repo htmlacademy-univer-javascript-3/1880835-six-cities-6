@@ -10,6 +10,7 @@ import {
   serializeError,
 } from '../../thunk';
 import ERROR_TYPES from './constants/ERROR_TYPES';
+import HTTP_STATUS from '../../../axios/constants/HTTP_STATUS';
 
 export const signOutThunk = createAppAsyncThunk<void>(
   ACTION_NAMES.signOut,
@@ -28,7 +29,10 @@ export const checkLoginThunk = createAppAsyncThunk<Auth | undefined>(
     try {
       return (await api.get<Auth>(ENDPOINTS.login)).data;
     } catch (error) {
-      if (error instanceof AxiosError && error.response?.status === 401) {
+      if (
+        error instanceof AxiosError &&
+        error.response?.status === HTTP_STATUS.unauthorized
+      ) {
         dispatch(signOutThunk());
         return rejectWithValue({
           type: ERROR_TYPES.loginCheckFailed,
@@ -58,7 +62,7 @@ export const loginThunk = createAppAsyncThunk<Auth, Credentials>(
       if (
         error instanceof AxiosError &&
         error.response &&
-        error.response.status === 400
+        error.response.status === HTTP_STATUS.validationError
       ) {
         return rejectWithValue({
           type: ERROR_TYPES.loginValidationError,

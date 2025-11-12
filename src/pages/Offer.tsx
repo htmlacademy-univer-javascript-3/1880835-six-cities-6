@@ -12,6 +12,7 @@ import { useOfferQuery } from '../domain/offer/hooks/useOfferQuery';
 import { useNearbyOffersQuery } from '../domain/offer/hooks/useNearbyOffersQuery';
 import { setErrorMessage } from '../domain/error/features/setErrorMessage';
 import { useAuthCheck } from '../domain/auth/hooks/useAuthCheck';
+import ERROR_TYPES from '../config/redux/thunk/constants/ERROR_TYPES';
 
 export function Offer() {
   useAuthCheck();
@@ -28,8 +29,12 @@ export function Offer() {
   }
 
   if (isError) {
-    setErrorMessage(error?.cause?.message);
-    return <Navigate to={routes.error} />;
+    if (error?.type === ERROR_TYPES.notFound) {
+      return <Navigate to={routes.notFound} />;
+    } else {
+      setErrorMessage(error?.cause?.message);
+      return <Navigate to={routes.error} />;
+    }
   }
 
   if (offer === undefined) {

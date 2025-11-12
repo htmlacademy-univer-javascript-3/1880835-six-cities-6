@@ -2,6 +2,9 @@ import { ENDPOINTS } from '../../../axios';
 import { OfferDetails, OfferMeta } from '../../../../domain/offer';
 import { createAppAsyncThunk, getRejectValue } from '../../thunk';
 import ACTION_NAMES from './constants/ACTION_NAMES';
+import { AxiosError } from 'axios';
+import HTTP_STATUS from '../../../axios/constants/HTTP_STATUS';
+import ERROR_TYPES from '../../thunk/constants/ERROR_TYPES';
 
 export const offersThunk = createAppAsyncThunk<OfferMeta[]>(
   ACTION_NAMES.offers,
@@ -29,7 +32,17 @@ export const offerThunk = createAppAsyncThunk<OfferDetails, string | undefined>(
       return (await api.get<OfferDetails>(ENDPOINTS.offer(offerID as string)))
         .data;
     } catch (error) {
-      return rejectWithValue(getRejectValue(error));
+      if (
+        error instanceof AxiosError &&
+        error.response?.status === HTTP_STATUS.notFound
+      ) {
+        return rejectWithValue({
+          type: ERROR_TYPES.notFound,
+          cause: { message: `Offer with ID ${offerID} not found` },
+        });
+      } else {
+        return rejectWithValue(getRejectValue(error));
+      }
     }
   },
   {
@@ -57,7 +70,19 @@ export const nearbyOffersThunk = createAppAsyncThunk<
         await api.get<OfferMeta[]>(ENDPOINTS.nearbyOffers(offerID as string))
       ).data;
     } catch (error) {
-      return rejectWithValue(getRejectValue(error));
+      if (
+        error instanceof AxiosError &&
+        error.response?.status === HTTP_STATUS.notFound
+      ) {
+        return rejectWithValue({
+          type: ERROR_TYPES.notFound,
+          cause: {
+            message: `Nearby offers not found for offer with ID ${offerID}`,
+          },
+        });
+      } else {
+        return rejectWithValue(getRejectValue(error));
+      }
     }
   },
   {

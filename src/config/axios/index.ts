@@ -1,5 +1,5 @@
 import axios from 'axios';
-import ENDPOINTS from './ENDPOINTS';
+import ENDPOINTS from './constants/ENDPOINTS.ts';
 import { selectAuthToken } from '../redux/slice/auth/selector';
 
 const api = axios.create({
