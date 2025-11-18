@@ -1,7 +1,6 @@
 import { Navigate, useParams } from 'react-router-dom';
 import { Header } from '../domain/ui/components/Header';
 import routes from '../domain/router/constants/ROUTES';
-import { Card } from '../domain/offer/components/Card/Card';
 import classNames from 'classnames';
 import { Rating } from '../domain/rating/components/Rating';
 import offerRatingClassNames from '../domain/offer/constants/offerRatingClassNames';
@@ -13,6 +12,7 @@ import { useNearbyOffersQuery } from '../domain/offer/hooks/useNearbyOffersQuery
 import { setErrorMessage } from '../domain/error/features/setErrorMessage';
 import { useAuthCheck } from '../domain/auth/hooks/useAuthCheck';
 import ERROR_TYPES from '../config/redux/thunk/constants/ERROR_TYPES';
+import CardList from '../domain/offer/components/CardList';
 
 export function Offer() {
   useAuthCheck();
@@ -151,14 +151,10 @@ export function Offer() {
               {isNearestOffersLoading ? (
                 <Loader />
               ) : (
-                nearestOffers.map((o) => (
-                  <Card
-                    key={o.id}
-                    offer={o}
-                    imageURL={o.previewImage}
-                    onClick={() => window.scrollTo(0, 0)}
-                  />
-                ))
+                <CardList
+                  offers={nearestOffers}
+                  onCardClick={() => window.scrollTo(0, 0)}
+                />
               )}
             </div>
           </section>
