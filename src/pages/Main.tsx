@@ -9,7 +9,7 @@ import { useCurrentCity } from '../domain/city/hooks/useCurrentCity';
 import { Loader } from '../domain/ui/components/Loader';
 import { Navigate } from 'react-router-dom';
 import routes from '../domain/router/constants/ROUTES';
-import { CityOffers } from '../domain/offer/components/CityOffers';
+import CityOffers from '../domain/offer/components/CityOffers';
 import { setErrorMessage } from '../domain/error/features/setErrorMessage';
 import { useAuthCheck } from '../domain/auth/hooks/useAuthCheck';
 
