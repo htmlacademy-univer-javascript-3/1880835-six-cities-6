@@ -7,6 +7,9 @@ import { CommentsSliceState } from './slice/comments/state';
 import { ErrorSliceState } from './slice/error/state';
 import { AuthSliceState } from './slice/auth/state';
 import { reducer } from './reducer';
+import { addTokenInterceptor } from './utils/axios';
+
+addTokenInterceptor(api);
 
 const store = configureStore({
   reducer,

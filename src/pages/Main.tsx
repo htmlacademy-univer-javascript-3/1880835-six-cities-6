@@ -41,7 +41,7 @@ export function Main() {
   }
 
   if (isError) {
-    setErrorMessage(error);
+    setErrorMessage(error?.cause?.message);
     return <Navigate to={routes.error} />;
   }
 

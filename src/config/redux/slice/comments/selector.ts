@@ -15,3 +15,11 @@ export const selectOfferCommentsQuery = createSelector(
       ? (offerComments[offerID] as ThunkQuery<PostedComment[]>)
       : getEmptyQueryState<PostedComment[]>()
 );
+
+export const selectCommentPostQuery = createSelector(
+  [selectCommentsState],
+  (commentsState) =>
+    commentsState.commentPost
+      ? commentsState.commentPost
+      : getEmptyQueryState<PostedComment>()
+);

@@ -5,7 +5,7 @@ export function Input({
   rating,
   onChange,
 }: {
-  rating: number;
+  rating?: number;
   onChange: ChangeEventHandler<HTMLInputElement>;
 }) {
   return (

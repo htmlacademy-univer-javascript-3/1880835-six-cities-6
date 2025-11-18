@@ -12,27 +12,29 @@ import { useOfferQuery } from '../domain/offer/hooks/useOfferQuery';
 import { useNearbyOffersQuery } from '../domain/offer/hooks/useNearbyOffersQuery';
 import { setErrorMessage } from '../domain/error/features/setErrorMessage';
 import { useAuthCheck } from '../domain/auth/hooks/useAuthCheck';
+import ERROR_TYPES from '../config/redux/thunk/constants/ERROR_TYPES';
 
 export function Offer() {
   useAuthCheck();
   const { id } = useParams<{ id: string }>();
   const { data: offer, isLoading, isError, error } = useOfferQuery(id);
-  const { data: nearestOffers } = useNearbyOffersQuery({
-    offerID: id,
-    limit: 3,
-  });
+  const { data: nearestOffers, isLoading: isNearestOffersLoading } =
+    useNearbyOffersQuery({
+      offerID: id,
+      limit: 3,
+    });
 
-  if (isLoading) {
+  if (isLoading || offer === undefined) {
     return <Loader />;
   }
 
   if (isError) {
-    setErrorMessage(error);
-    return <Navigate to={routes.error} />;
-  }
-
-  if (offer === undefined) {
-    return <Navigate to={routes.notFound} />;
+    if (error?.type === ERROR_TYPES.notFound) {
+      return <Navigate to={routes.notFound} />;
+    } else {
+      setErrorMessage(error?.cause?.message);
+      return <Navigate to={routes.error} />;
+    }
   }
 
   return (
@@ -146,7 +148,9 @@ export function Offer() {
               Other places in the neighbourhood
             </h2>
             <div className="near-places__list places__list">
-              {nearestOffers &&
+              {isNearestOffersLoading ? (
+                <Loader />
+              ) : (
                 nearestOffers.map((o) => (
                   <Card
                     key={o.id}
@@ -154,7 +158,8 @@ export function Offer() {
                     imageURL={o.previewImage}
                     onClick={() => window.scrollTo(0, 0)}
                   />
-                ))}
+                ))
+              )}
             </div>
           </section>
         </div>
