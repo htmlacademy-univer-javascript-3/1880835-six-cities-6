@@ -6,6 +6,7 @@ import routes from '../../../router/constants/ROUTES';
 import { Rating } from '../../../rating/components/Rating';
 import cardRatingClassNames from './constants/ratingClassNames';
 import classNames from 'classnames';
+import { useAuthStatus } from '../../../auth';
 
 type CardVariant = 'cities' | 'favorites';
 function cardVariant(variant: CardVariant) {
@@ -53,6 +54,7 @@ export function Card({
     () => cardVariant(variant ?? 'cities'),
     [variant]
   );
+  const isAuth = useAuthStatus();
 
   return (
     <article
@@ -87,22 +89,24 @@ export function Card({
             <b className="place-card__price-value">&euro;{price}</b>
             <span className="place-card__price-text">&#47;&nbsp;night</span>
           </div>
-          <button
-            className={[
-              'place-card__bookmark-button button',
-              isFavorite ? 'place-card__bookmark-button--active' : null,
-            ]
-              .filter((e) => e !== null)
-              .join(' ')}
-            type="button"
-          >
-            <svg className="place-card__bookmark-icon" width="18" height="19">
-              <use xlinkHref="#icon-bookmark"></use>
-            </svg>
-            <span className="visually-hidden">
-              {isFavorite ? 'In bookmarks' : 'To bookmarks'}
-            </span>
-          </button>
+          {isAuth && (
+            <button
+              className={[
+                'place-card__bookmark-button button',
+                isFavorite ? 'place-card__bookmark-button--active' : null,
+              ]
+                .filter((e) => e !== null)
+                .join(' ')}
+              type="button"
+            >
+              <svg className="place-card__bookmark-icon" width="18" height="19">
+                <use xlinkHref="#icon-bookmark"></use>
+              </svg>
+              <span className="visually-hidden">
+                {isFavorite ? 'In bookmarks' : 'To bookmarks'}
+              </span>
+            </button>
+          )}
         </div>
         <Rating rating={rating} classNames={cardRatingClassNames} />
         <h2 className="place-card__name">
