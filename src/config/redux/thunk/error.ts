@@ -29,6 +29,8 @@ export function getErrorTypeByHTTPStatus(status: number) {
       return ERROR_TYPES.unauthorized;
     case HTTP_STATUS.validationError:
       return ERROR_TYPES.validationFailed;
+    case HTTP_STATUS.conflict:
+      return ERROR_TYPES.conflict;
     default:
       return ERROR_TYPES.unknown;
   }

@@ -1,10 +1,12 @@
 import { createSlice } from '@reduxjs/toolkit';
 import SLICE_NAMES from '../../constants/SLICE_NAMES';
 import {
+  addOfferToFavoritesThunk,
   favoriteOffersThunk,
   nearbyOffersThunk,
   offerThunk,
   offersThunk,
+  removeOfferFromFavoritesThunk,
 } from './action';
 import { emptyState } from './state';
 import {
@@ -54,6 +56,54 @@ export const offersSlice = createSlice({
       })
       .addCase(favoriteOffersThunk.rejected, (s, a) => {
         s.favoriteOffers = getRejectedState(a.payload);
+      })
+      .addCase(addOfferToFavoritesThunk.pending, (s, a) => {
+        s.favoriteOfferChangeState[a.meta.arg] = getPendingState();
+      })
+      .addCase(addOfferToFavoritesThunk.fulfilled, (s, a) => {
+        const offer = a.payload;
+        const detailedOffer = s.offer[offer.id];
+        s.favoriteOfferChangeState[a.meta.arg] = getFulfilledState(offer);
+        if (s.favoriteOffers?.data) {
+          s.favoriteOffers.data = [...s.favoriteOffers.data, offer];
+        }
+        if (s.offers?.data) {
+          const meta = s.offers.data.find((o) => o.id === offer.id);
+          if (meta) {
+            meta.isFavorite = true;
+          }
+        }
+        if (detailedOffer && detailedOffer.data) {
+          detailedOffer.data.isFavorite = true;
+        }
+      })
+      .addCase(addOfferToFavoritesThunk.rejected, (s, a) => {
+        s.favoriteOfferChangeState[a.meta.arg] = getRejectedState(a.payload);
+      })
+      .addCase(removeOfferFromFavoritesThunk.pending, (s, a) => {
+        s.favoriteOfferChangeState[a.meta.arg] = getPendingState();
+      })
+      .addCase(removeOfferFromFavoritesThunk.fulfilled, (s, a) => {
+        const offer = a.payload;
+        const detailedOffer = s.offer[offer.id];
+        s.favoriteOfferChangeState[a.meta.arg] = getFulfilledState(offer);
+        if (s.favoriteOffers?.data) {
+          s.favoriteOffers.data = s.favoriteOffers.data.filter(
+            (o) => o.id !== offer.id
+          );
+        }
+        if (s.offers?.data) {
+          const meta = s.offers.data.find((o) => o.id === offer.id);
+          if (meta) {
+            meta.isFavorite = false;
+          }
+        }
+        if (detailedOffer && detailedOffer.data) {
+          detailedOffer.data.isFavorite = false;
+        }
+      })
+      .addCase(removeOfferFromFavoritesThunk.rejected, (s, a) => {
+        s.favoriteOfferChangeState[a.meta.arg] = getRejectedState(a.payload);
       }),
 });
 

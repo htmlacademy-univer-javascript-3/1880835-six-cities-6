@@ -3,4 +3,5 @@ export default {
   notFound: 'notFound',
   unauthorized: 'unauthorized',
   validationFailed: 'validationFailed',
+  conflict: 'conflict',
 };

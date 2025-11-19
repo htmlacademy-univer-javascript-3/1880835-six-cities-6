@@ -44,3 +44,6 @@ export const selectFavoriteOffers = createSelector(
   (favoriteOffers) =>
     favoriteOffers ? favoriteOffers : getEmptyQueryState<OfferMeta[]>()
 );
+
+export const selectFavoriteOfferChangeState = (s: State) =>
+  s.offers.favoriteOfferChangeState;

@@ -14,6 +14,8 @@ import { useAuthCheck } from '../domain/auth/hooks/useAuthCheck';
 import ERROR_TYPES from '../config/redux/thunk/constants/ERROR_TYPES';
 import CardList from '../domain/offer/components/CardList';
 import { useAuthStatus } from '../domain/auth';
+import { removeOfferWithIdFromFavorites } from '../domain/offer/features/removeOfferWithIdFromFavorites';
+import { addOfferWithIdToFavorites } from '../domain/offer/features/addOfferWithIdToFavorites';
 
 export function Offer() {
   useAuthCheck();
@@ -69,6 +71,10 @@ export function Offer() {
                       offer.isFavorite ? 'offer__bookmark-button--active' : null
                     )}
                     type="button"
+                    onClick={() =>
+                      offer.isFavorite
+                        ? removeOfferWithIdFromFavorites(offer.id)
+                        : addOfferWithIdToFavorites(offer.id)}
                   >
                     <svg
                       className="offer__bookmark-icon"
