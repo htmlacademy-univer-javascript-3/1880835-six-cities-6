@@ -162,7 +162,7 @@ export const addOfferToFavoritesThunk = createAppAsyncThunk<OfferMeta, string>(
       );
       return (
         favoriteOffersChangeState[offerId] === undefined ||
-        !favoriteOffersChangeState[offerId].isLoading
+        !favoriteOffersChangeState[offerId]?.isLoading
       );
     },
   }
@@ -198,7 +198,7 @@ export const removeOfferFromFavoritesThunk = createAppAsyncThunk<
       );
       return (
         favoriteOffersChangeState[offerId] === undefined ||
-        !favoriteOffersChangeState[offerId].isLoading
+        !favoriteOffersChangeState[offerId]?.isLoading
       );
     },
   }
