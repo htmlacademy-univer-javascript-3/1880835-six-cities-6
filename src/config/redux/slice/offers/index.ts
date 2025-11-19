@@ -1,6 +1,11 @@
 import { createSlice } from '@reduxjs/toolkit';
 import SLICE_NAMES from '../../constants/SLICE_NAMES';
-import { nearbyOffersThunk, offerThunk, offersThunk } from './action';
+import {
+  favoriteOffersThunk,
+  nearbyOffersThunk,
+  offerThunk,
+  offersThunk,
+} from './action';
 import { emptyState } from './state';
 import {
   getFulfilledState,
@@ -40,6 +45,15 @@ export const offersSlice = createSlice({
       })
       .addCase(nearbyOffersThunk.rejected, (s, a) => {
         s.nearbyOffers[a.meta.arg as string] = getRejectedState(a.payload);
+      })
+      .addCase(favoriteOffersThunk.pending, (s) => {
+        s.favoriteOffers = getPendingState();
+      })
+      .addCase(favoriteOffersThunk.fulfilled, (s, a) => {
+        s.favoriteOffers = getFulfilledState(a.payload);
+      })
+      .addCase(favoriteOffersThunk.rejected, (s, a) => {
+        s.favoriteOffers = getRejectedState(a.payload);
       }),
 });
 

@@ -5,6 +5,7 @@ interface OffersSliceState {
   offers?: ThunkQuery<OfferMeta[]>;
   offer: Record<string, ThunkQuery<OfferDetails> | undefined>;
   nearbyOffers: Record<string, ThunkQuery<OfferMeta[]> | undefined>;
+  favoriteOffers?: ThunkQuery<OfferMeta[]>;
 }
 
 const emptyState = (): OffersSliceState => ({
