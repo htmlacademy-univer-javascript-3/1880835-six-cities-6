@@ -76,6 +76,11 @@ export const offersSlice = createSlice({
         if (detailedOffer && detailedOffer.data) {
           detailedOffer.data.isFavorite = true;
         }
+        for (const nearbyOffers of Object.values(s.nearbyOffers)) {
+          nearbyOffers?.data?.forEach((o) =>
+            o.id === offer.id ? (o.isFavorite = true) : null
+          );
+        }
       })
       .addCase(addOfferToFavoritesThunk.rejected, (s, a) => {
         s.favoriteOfferChangeState[a.meta.arg] = getRejectedState(a.payload);
@@ -100,6 +105,11 @@ export const offersSlice = createSlice({
         }
         if (detailedOffer && detailedOffer.data) {
           detailedOffer.data.isFavorite = false;
+        }
+        for (const nearbyOffers of Object.values(s.nearbyOffers)) {
+          nearbyOffers?.data?.forEach((o) =>
+            o.id === offer.id ? (o.isFavorite = false) : null
+          );
         }
       })
       .addCase(removeOfferFromFavoritesThunk.rejected, (s, a) => {
