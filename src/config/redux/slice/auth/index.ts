@@ -7,11 +7,20 @@ import {
   getPendingState,
   getRejectedState,
 } from '../../thunk';
+import { getAuthDataFromLocalStorage } from './utils/localStorage';
 
 export const authSlice = createSlice({
   name: SLICE_NAMES.auth,
   initialState: getEmptyState(),
-  reducers: {},
+  reducers: {
+    restoreFromLocalStorage(state) {
+      const authData = getAuthDataFromLocalStorage();
+      if (authData !== null) {
+        state.status = true;
+        state.auth = getFulfilledState(authData);
+      }
+    },
+  },
   extraReducers: (builder) =>
     builder
       .addCase(checkLoginThunk.pending, (s) => {

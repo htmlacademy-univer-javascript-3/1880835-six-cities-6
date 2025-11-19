@@ -11,11 +11,13 @@ import {
 } from '../../thunk';
 import HTTP_STATUS from '../../../axios/constants/HTTP_STATUS';
 import ERROR_TYPES from '../../thunk/constants/ERROR_TYPES';
+import LOCAL_STORAGE from './constants/local-storage';
 
 export const signOutThunk = createAppAsyncThunk<void>(
   ACTION_NAMES.signOut,
   (_, { dispatch }) => {
     dispatch(resetStateAction());
+    localStorage.clear();
   }
 );
 
@@ -46,7 +48,7 @@ export const checkLoginThunk = createAppAsyncThunk<Auth | undefined>(
   {
     condition: (_, { getState }) => {
       const authState = selectAuthState(getState());
-      return authState === undefined || !authState.auth?.isLoading;
+      return authState.auth !== undefined && !authState.auth?.isLoading;
     },
   }
 );
@@ -57,6 +59,7 @@ export const loginThunk = createAppAsyncThunk<Auth, Credentials>(
     try {
       const data = (await api.post<Auth>(ENDPOINTS.login, credentials)).data;
       dispatch(resetStateAction());
+      localStorage.setItem(LOCAL_STORAGE.auth, JSON.stringify(data));
       return data;
     } catch (error) {
       if (

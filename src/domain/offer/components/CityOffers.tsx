@@ -1,12 +1,12 @@
-import { Dispatch, SetStateAction, useMemo } from 'react';
+import { Dispatch, SetStateAction, useCallback, useMemo } from 'react';
 import { Offer, OfferMeta } from '../types';
-import { Card } from './Card/Card';
 import { City } from '../../city/types';
 import { SortSelect } from './SortSelect';
 import { useSortSelectOptions } from './SortSelect/hooks/useSortSelectOptions';
 import { comparatorBySortType } from '../helpers/comparatorBySortType';
+import CardList from './CardList';
 
-export function CityOffers({
+export default function CityOffers({
   city,
   offers,
   setCurrentOffer,
@@ -16,6 +16,11 @@ export function CityOffers({
   setCurrentOffer: Dispatch<SetStateAction<Offer | undefined>>;
 }) {
   const { select, selectedOption } = useSortSelectOptions();
+  const onCardMouseEntry = useCallback(
+    ({ offer }: { offer: OfferMeta }) => setCurrentOffer(offer),
+    [setCurrentOffer]
+  );
+
   const comparator = useMemo(
     () => comparatorBySortType(selectedOption.value),
     [selectedOption]
@@ -32,14 +37,7 @@ export function CityOffers({
       </b>
       <SortSelect select={select} />
       <div className="cities__places-list places__list tabs__content">
-        {sortedOffers.map((o) => (
-          <Card
-            key={o.id}
-            offer={o}
-            imageURL={o.previewImage}
-            onMouseEnter={() => setCurrentOffer(o)}
-          />
-        ))}
+        <CardList offers={sortedOffers} onCardMouseEntry={onCardMouseEntry} />
       </div>
     </section>
   );
