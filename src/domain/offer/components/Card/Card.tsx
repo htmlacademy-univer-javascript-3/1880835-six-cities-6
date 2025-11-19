@@ -9,6 +9,7 @@ import classNames from 'classnames';
 import { useAuthStatus } from '../../../auth';
 import { removeOfferWithIdFromFavorites } from '../../features/removeOfferWithIdFromFavorites';
 import { addOfferWithIdToFavorites } from '../../features/addOfferWithIdToFavorites';
+import { stopPropagation } from '../../../../utils/event';
 
 type CardVariant = 'cities' | 'favorites';
 function cardVariant(variant: CardVariant) {
@@ -100,10 +101,11 @@ export function Card({
                 .filter((e) => e !== null)
                 .join(' ')}
               type="button"
-              onClick={() =>
+              onClick={stopPropagation(() =>
                 isFavorite
                   ? removeOfferWithIdFromFavorites(id)
-                  : addOfferWithIdToFavorites(id)}
+                  : addOfferWithIdToFavorites(id)
+              )}
             >
               <svg className="place-card__bookmark-icon" width="18" height="19">
                 <use xlinkHref="#icon-bookmark"></use>
