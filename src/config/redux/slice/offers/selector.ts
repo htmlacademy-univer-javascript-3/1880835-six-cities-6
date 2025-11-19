@@ -15,7 +15,7 @@ export const selectOffers = createSelector(
   ({ data }) => data ?? []
 );
 
-export const selectOfferState = (s: State) => s.offers.offer;
+export const selectOfferState = (s: State) => selectOffersState(s).offer;
 
 export const selectOfferQuery = createSelector(
   [selectOfferState, (_state, offerID: string | undefined) => offerID],
@@ -25,7 +25,8 @@ export const selectOfferQuery = createSelector(
       : getEmptyQueryState<OfferDetails>()
 );
 
-export const selectNearbyOffersState = (s: State) => s.offers.nearbyOffers;
+export const selectNearbyOffersState = (s: State) =>
+  selectOffersState(s).nearbyOffers;
 
 export const selectNearbyOffers = createSelector(
   [selectNearbyOffersState, (_state, offerID: string | undefined) => offerID],
@@ -34,3 +35,15 @@ export const selectNearbyOffers = createSelector(
       ? (nearbyOffersState[offerID] as ThunkQuery<OfferMeta[]>)
       : getEmptyQueryState<OfferMeta[]>()
 );
+
+export const selectFavoriteOffersState = (s: State) =>
+  selectOffersState(s).favoriteOffers;
+
+export const selectFavoriteOffers = createSelector(
+  [selectFavoriteOffersState],
+  (favoriteOffers) =>
+    favoriteOffers ? favoriteOffers : getEmptyQueryState<OfferMeta[]>()
+);
+
+export const selectFavoriteOfferChangeState = (s: State) =>
+  s.offers.favoriteOfferChangeState;

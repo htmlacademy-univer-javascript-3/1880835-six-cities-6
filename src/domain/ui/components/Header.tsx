@@ -5,11 +5,13 @@ import { preventDefault } from '../../../utils/event';
 import { signOut } from '../../auth/features/signOut';
 import ROUTES from '../../router/constants/ROUTES';
 import { useAuthQuery } from '../../auth/hooks/useAuthQuery';
+import { useFavoriteOffersQuery } from '../../offer/hooks/useFavoriteOffersQuery';
 
 export function Header() {
   const { data } = useAuthQuery();
   const isAuth = useAuthStatus();
   const navigate = useNavigate();
+  const { data: favoriteOffers } = useFavoriteOffersQuery();
 
   const onSignOut = preventDefault(() => {
     signOut();
@@ -47,7 +49,7 @@ export function Header() {
                       {data?.email}
                     </span>
                     <span className="header__favorite-count">
-                      {3 /* TODO: favorite count */}
+                      {favoriteOffers ? favoriteOffers.length : 0}
                     </span>
                   </Link>
                 </li>
