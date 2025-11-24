@@ -2,7 +2,7 @@ import { Favorites as FavoritesView } from '../domain/offer/components/Favorites
 import { Header } from '../domain/ui/components/Header';
 import { useOffersQuery } from '../domain/offer';
 import { Loader } from '../domain/ui/components/Loader';
-import { Navigate } from 'react-router-dom';
+import { Link, Navigate } from 'react-router-dom';
 import routes from '../domain/router/constants/ROUTES';
 import { setErrorMessage } from '../domain/error/features/setErrorMessage';
 import { useAuthCheck } from '../domain/auth/hooks/useAuthCheck';
@@ -25,11 +25,11 @@ export function Favorites() {
       <Header />
       <main className="page__main page__main--favorites">
         <div className="page__favorites-container container">
-          <FavoritesView offers={offers} />
+          <FavoritesView />
         </div>
       </main>
       <footer className="footer container">
-        <a className="footer__logo-link" href="main.html">
+        <Link className="footer__logo-link" to={routes.cities}>
           <img
             className="footer__logo"
             src="img/logo.svg"
@@ -37,7 +37,7 @@ export function Favorites() {
             width={64}
             height={33}
           />
-        </a>
+        </Link>
       </footer>
     </div>
   );

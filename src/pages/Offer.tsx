@@ -13,6 +13,9 @@ import { setErrorMessage } from '../domain/error/features/setErrorMessage';
 import { useAuthCheck } from '../domain/auth/hooks/useAuthCheck';
 import ERROR_TYPES from '../config/redux/thunk/constants/ERROR_TYPES';
 import CardList from '../domain/offer/components/CardList';
+import { useAuthStatus } from '../domain/auth';
+import { removeOfferWithIdFromFavorites } from '../domain/offer/features/removeOfferWithIdFromFavorites';
+import { addOfferWithIdToFavorites } from '../domain/offer/features/addOfferWithIdToFavorites';
 
 export function Offer() {
   useAuthCheck();
@@ -23,6 +26,7 @@ export function Offer() {
       offerID: id,
       limit: 3,
     });
+  const isAuth = useAuthStatus();
 
   if (isLoading || offer === undefined) {
     return <Loader />;
@@ -60,18 +64,28 @@ export function Offer() {
               )}
               <div className="offer__name-wrapper">
                 <h1 className="offer__name">{offer.title}</h1>
-                <button
-                  className={classNames(
-                    'offer__bookmark-button button',
-                    offer.isFavorite ? 'offer__bookmark-button--active' : null
-                  )}
-                  type="button"
-                >
-                  <svg className="offer__bookmark-icon" width={31} height={33}>
-                    <use xlinkHref="#icon-bookmark" />
-                  </svg>
-                  <span className="visually-hidden">To bookmarks</span>
-                </button>
+                {isAuth && (
+                  <button
+                    className={classNames(
+                      'offer__bookmark-button button',
+                      offer.isFavorite ? 'offer__bookmark-button--active' : null
+                    )}
+                    type="button"
+                    onClick={() =>
+                      offer.isFavorite
+                        ? removeOfferWithIdFromFavorites(offer.id)
+                        : addOfferWithIdToFavorites(offer.id)}
+                  >
+                    <svg
+                      className="offer__bookmark-icon"
+                      width={31}
+                      height={33}
+                    >
+                      <use xlinkHref="#icon-bookmark" />
+                    </svg>
+                    <span className="visually-hidden">To bookmarks</span>
+                  </button>
+                )}
               </div>
               <Rating
                 rating={offer.rating}

@@ -1,10 +1,20 @@
 import { ENDPOINTS } from '../../../axios';
 import { OfferDetails, OfferMeta } from '../../../../domain/offer';
-import { createAppAsyncThunk, getRejectValue } from '../../thunk';
+import {
+  createAppAsyncThunk,
+  getErrorTypeByHTTPStatus,
+  getRejectValue,
+  serializeError,
+} from '../../thunk';
 import ACTION_NAMES from './constants/ACTION_NAMES';
 import { AxiosError } from 'axios';
 import HTTP_STATUS from '../../../axios/constants/HTTP_STATUS';
 import ERROR_TYPES from '../../thunk/constants/ERROR_TYPES';
+import { selectAuthStatus } from '../auth/selector';
+import {
+  selectFavoriteOfferChangeState,
+  selectFavoriteOffersState,
+} from './selector';
 
 export const offersThunk = createAppAsyncThunk<OfferMeta[]>(
   ACTION_NAMES.offers,
@@ -95,6 +105,101 @@ export const nearbyOffersThunk = createAppAsyncThunk<
       } = getState();
       const currentNearbyOffers = nearbyOffers[offerID];
       return currentNearbyOffers === undefined;
+    },
+  }
+);
+
+export const favoriteOffersThunk = createAppAsyncThunk<OfferMeta[], void>(
+  ACTION_NAMES.favoriteOffers,
+  async (_, { rejectWithValue, extra: { api } }) => {
+    try {
+      return (await api.get<OfferMeta[]>(ENDPOINTS.favorite)).data;
+    } catch (error) {
+      if (error instanceof AxiosError && error.response) {
+        return rejectWithValue({
+          type: getErrorTypeByHTTPStatus(error.response.status),
+          cause: serializeError(error),
+        });
+      } else {
+        return rejectWithValue(getRejectValue(error));
+      }
+    }
+  },
+  {
+    condition: (_, { getState }) => {
+      const state = getState();
+      const authStatus = selectAuthStatus(state);
+      const favoriteOfferState = selectFavoriteOffersState(state);
+      return authStatus && favoriteOfferState === undefined;
+    },
+  }
+);
+
+export const addOfferToFavoritesThunk = createAppAsyncThunk<OfferMeta, string>(
+  ACTION_NAMES.addOfferToFavorites,
+  async (offerId, { rejectWithValue, extra: { api } }) => {
+    try {
+      return (
+        await api.post<OfferMeta>(
+          ENDPOINTS.offerFavoriteState({ offerId, isFavorite: true })
+        )
+      ).data;
+    } catch (error) {
+      if (error instanceof AxiosError && error.response) {
+        return rejectWithValue({
+          type: getErrorTypeByHTTPStatus(error.response.status),
+          cause: serializeError(error),
+        });
+      } else {
+        return rejectWithValue(getRejectValue(error));
+      }
+    }
+  },
+  {
+    condition: (offerId, { getState }) => {
+      const favoriteOffersChangeState = selectFavoriteOfferChangeState(
+        getState()
+      );
+      return (
+        favoriteOffersChangeState[offerId] === undefined ||
+        !favoriteOffersChangeState[offerId]?.isLoading
+      );
+    },
+  }
+);
+
+export const removeOfferFromFavoritesThunk = createAppAsyncThunk<
+  OfferMeta,
+  string
+>(
+  ACTION_NAMES.removeOfferToFavorites,
+  async (offerId, { rejectWithValue, extra: { api } }) => {
+    try {
+      return (
+        await api.post<OfferMeta>(
+          ENDPOINTS.offerFavoriteState({ offerId, isFavorite: false })
+        )
+      ).data;
+    } catch (error) {
+      if (error instanceof AxiosError && error.response) {
+        return rejectWithValue({
+          type: getErrorTypeByHTTPStatus(error.response.status),
+          cause: serializeError(error),
+        });
+      } else {
+        return rejectWithValue(getRejectValue(error));
+      }
+    }
+  },
+  {
+    condition: (offerId, { getState }) => {
+      const favoriteOffersChangeState = selectFavoriteOfferChangeState(
+        getState()
+      );
+      return (
+        favoriteOffersChangeState[offerId] === undefined ||
+        !favoriteOffersChangeState[offerId]?.isLoading
+      );
     },
   }
 );

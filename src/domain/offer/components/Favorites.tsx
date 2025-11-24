@@ -1,17 +1,32 @@
 import { useMemo } from 'react';
 import { OfferMeta } from '../types';
 import { Card } from './Card/Card';
+import { useFavoriteOffersQuery } from '../hooks/useFavoriteOffersQuery';
+import { Loader } from '../../ui/components/Loader';
+import { setErrorMessage } from '../../error/features/setErrorMessage';
+import { Navigate } from 'react-router-dom';
+import ROUTES from '../../router/constants/ROUTES';
 
-export function Favorites({ offers }: { offers: OfferMeta[] }) {
+export function Favorites() {
+  const { data: offers, isLoading, isError, error } = useFavoriteOffersQuery();
   const citiesOffers = useMemo<Record<string, OfferMeta[]>>(() => {
     const result: Record<string, OfferMeta[]> = {};
-    offers.forEach((o) =>
+    offers?.forEach((o) =>
       result[o.city.name]
         ? result[o.city.name].push(o)
         : (result[o.city.name] = [o])
     );
     return result;
   }, [offers]);
+
+  if (isLoading) {
+    return <Loader />;
+  }
+
+  if (isError) {
+    setErrorMessage(error?.cause?.message);
+    return <Navigate to={ROUTES.error} />;
+  }
 
   return (
     <section className="favorites">
