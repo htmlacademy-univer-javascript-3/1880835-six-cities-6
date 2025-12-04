@@ -1,6 +1,6 @@
 import classNames from 'classnames';
 import { CommentForm } from './CommentForm';
-import { CommentsList } from './CommentsList';
+import { CommentsList } from './comments-list';
 import { useOfferCommentsQuery } from '../hooks/useOfferCommentsQuery';
 import { Loader } from '../../ui/components/Loader';
 import { ReactNode } from 'react';

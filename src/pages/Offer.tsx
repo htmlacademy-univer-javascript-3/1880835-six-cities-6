@@ -2,7 +2,7 @@ import { Navigate, useParams } from 'react-router-dom';
 import { Header } from '../domain/ui/components/Header';
 import routes from '../domain/router/constants/ROUTES';
 import classNames from 'classnames';
-import { Rating } from '../domain/rating/components/Rating';
+import { Rating } from '../domain/rating/components/rating';
 import offerRatingClassNames from '../domain/offer/constants/offerRatingClassNames';
 import { CommentsSection } from '../domain/comment/components/CommentsSection';
 import { Map } from '../domain/map';

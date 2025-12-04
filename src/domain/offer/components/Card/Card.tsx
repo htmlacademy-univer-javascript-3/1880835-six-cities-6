@@ -3,7 +3,7 @@ import { capitalize } from '../../../../utils/string';
 import { Offer } from '../../types';
 import { Link } from 'react-router-dom';
 import routes from '../../../router/constants/ROUTES';
-import { Rating } from '../../../rating/components/Rating';
+import { Rating } from '../../../rating/components/rating';
 import cardRatingClassNames from './constants/ratingClassNames';
 import classNames from 'classnames';
 import { useAuthStatus } from '../../../auth';

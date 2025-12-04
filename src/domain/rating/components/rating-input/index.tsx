@@ -1,7 +1,7 @@
 import { ChangeEventHandler, Fragment } from 'react';
-import ratingTitles from '../constants/ratingTitles';
+import ratingTitles from '../../constants/ratingTitles';
 
-export function Input({
+export function RatingInput({
   rating,
   onChange,
 }: {
@@ -20,6 +20,7 @@ export function Input({
             type="radio"
             checked={n === rating}
             onChange={onChange}
+            data-testid={`${n}-stars`}
           />
           <label
             htmlFor={`${n}-stars`}

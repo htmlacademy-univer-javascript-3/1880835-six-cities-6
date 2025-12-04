@@ -1,4 +1,4 @@
-import { PostedComment } from '../types';
+import { PostedComment } from '../../types';
 
 export function CommentsList({ comments }: { comments: PostedComment[] }) {
   return (

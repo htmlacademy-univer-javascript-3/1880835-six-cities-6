@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Input as RatingInput } from '../../rating/components/Input';
+import { RatingInput as RatingInput } from '../../rating/components/rating-input';
 import { Comment } from '../types';
 import { createOnChangeHandler } from '../../../utils/react/form/createOnChangeHandler';
 import { postComment } from '../features/postComment';
