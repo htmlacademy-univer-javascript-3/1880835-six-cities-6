@@ -2,7 +2,7 @@ import { Auth, Credentials } from '../../../../domain/auth/types';
 import { ENDPOINTS, ValidationErrorResponse } from '../../../axios';
 import { selectAuthState, selectAuthToken } from './selector';
 import { resetStateAction } from '../../utils/resetState';
-import { AxiosError } from 'axios';
+import { isAxiosError } from 'axios';
 import ACTION_NAMES from './constants/ACTION_NAMES';
 import {
   createAppAsyncThunk,
@@ -32,7 +32,7 @@ export const checkLoginThunk = createAppAsyncThunk<Auth | undefined>(
       return (await api.get<Auth>(ENDPOINTS.login)).data;
     } catch (error) {
       if (
-        error instanceof AxiosError &&
+        isAxiosError(error) &&
         error.response?.status === HTTP_STATUS.unauthorized
       ) {
         dispatch(signOutThunk());
@@ -63,7 +63,7 @@ export const loginThunk = createAppAsyncThunk<Auth, Credentials>(
       return data;
     } catch (error) {
       if (
-        error instanceof AxiosError &&
+        isAxiosError(error) &&
         error.response &&
         error.response.status === HTTP_STATUS.validationError
       ) {

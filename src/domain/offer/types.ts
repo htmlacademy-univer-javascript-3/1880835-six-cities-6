@@ -1,13 +1,14 @@
 import { City } from '../city/types';
 import { Position } from '../map/types';
 import { User } from '../user';
+import offerTypes from './constants/offer-types';
 
-type OfferType = 'apartment' | 'room';
+type OfferType = keyof typeof offerTypes;
 
 interface Offer {
   id: string;
   title: string;
-  type: string;
+  type: OfferType;
   price: number;
   city: City;
   location: Position;
