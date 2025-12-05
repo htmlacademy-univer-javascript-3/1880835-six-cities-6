@@ -26,7 +26,7 @@ export default function CityOffers({
     [selectedOption]
   );
   const sortedOffers = useMemo(
-    () => offers.toSorted(comparator),
+    () => [...offers].sort(comparator),
     [comparator, offers]
   );
 
