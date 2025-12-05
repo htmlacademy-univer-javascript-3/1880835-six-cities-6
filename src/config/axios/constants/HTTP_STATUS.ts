@@ -1,4 +1,5 @@
 export default {
+  ok: 200,
   validationError: 400,
   unauthorized: 401,
   notFound: 404,

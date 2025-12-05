@@ -9,11 +9,11 @@ interface OffersSliceState {
   favoriteOfferChangeState: Record<string, ThunkQuery<OfferMeta> | undefined>;
 }
 
-const emptyState = (): OffersSliceState => ({
+const getEmptyState = (): OffersSliceState => ({
   offer: {},
   nearbyOffers: {},
   favoriteOfferChangeState: {},
 });
 
-export { emptyState };
+export { getEmptyState };
 export type { OffersSliceState };

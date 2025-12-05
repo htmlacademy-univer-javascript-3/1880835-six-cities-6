@@ -8,7 +8,7 @@ import {
   offersThunk,
   removeOfferFromFavoritesThunk,
 } from './action';
-import { emptyState } from './state';
+import { getEmptyState } from './state';
 import {
   getFulfilledState,
   getPendingState,
@@ -17,7 +17,7 @@ import {
 
 export const offersSlice = createSlice({
   name: SLICE_NAMES.offers,
-  initialState: emptyState(),
+  initialState: getEmptyState(),
   reducers: {},
   extraReducers: (builder) =>
     builder

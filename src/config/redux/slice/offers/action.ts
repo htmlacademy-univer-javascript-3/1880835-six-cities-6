@@ -7,7 +7,7 @@ import {
   serializeError,
 } from '../../thunk';
 import ACTION_NAMES from './constants/ACTION_NAMES';
-import { AxiosError } from 'axios';
+import { isAxiosError } from 'axios';
 import HTTP_STATUS from '../../../axios/constants/HTTP_STATUS';
 import ERROR_TYPES from '../../thunk/constants/ERROR_TYPES';
 import { selectAuthStatus } from '../auth/selector';
@@ -43,7 +43,7 @@ export const offerThunk = createAppAsyncThunk<OfferDetails, string | undefined>(
         .data;
     } catch (error) {
       if (
-        error instanceof AxiosError &&
+        isAxiosError(error) &&
         error.response?.status === HTTP_STATUS.notFound
       ) {
         return rejectWithValue({
@@ -81,7 +81,7 @@ export const nearbyOffersThunk = createAppAsyncThunk<
       ).data;
     } catch (error) {
       if (
-        error instanceof AxiosError &&
+        isAxiosError(error) &&
         error.response?.status === HTTP_STATUS.notFound
       ) {
         return rejectWithValue({
@@ -115,7 +115,7 @@ export const favoriteOffersThunk = createAppAsyncThunk<OfferMeta[], void>(
     try {
       return (await api.get<OfferMeta[]>(ENDPOINTS.favorite)).data;
     } catch (error) {
-      if (error instanceof AxiosError && error.response) {
+      if (isAxiosError(error) && error.response) {
         return rejectWithValue({
           type: getErrorTypeByHTTPStatus(error.response.status),
           cause: serializeError(error),
@@ -145,7 +145,7 @@ export const addOfferToFavoritesThunk = createAppAsyncThunk<OfferMeta, string>(
         )
       ).data;
     } catch (error) {
-      if (error instanceof AxiosError && error.response) {
+      if (isAxiosError(error) && error.response) {
         return rejectWithValue({
           type: getErrorTypeByHTTPStatus(error.response.status),
           cause: serializeError(error),
@@ -181,7 +181,7 @@ export const removeOfferFromFavoritesThunk = createAppAsyncThunk<
         )
       ).data;
     } catch (error) {
-      if (error instanceof AxiosError && error.response) {
+      if (isAxiosError(error) && error.response) {
         return rejectWithValue({
           type: getErrorTypeByHTTPStatus(error.response.status),
           cause: serializeError(error),
