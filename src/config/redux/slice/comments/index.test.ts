@@ -2,13 +2,13 @@ import { getPostedCommentsMock } from '../../../../domain/comment/mocks/get-post
 import { ENDPOINTS } from '../../../axios';
 import HTTP_STATUS from '../../../axios/constants/HTTP_STATUS';
 import { getApiMock } from '../../../axios/utils/test/get-api-mock';
-import { expectFulfilledThunkValue, getMockStore } from '../../utils/test';
+import { expectFulfilledThunkValue, getMockStoreCreator } from '../../utils/test';
 import { offerCommentsThunk, postCommentThunk } from './action';
 import { getEmptyState } from './state';
 
 describe('comments slice', () => {
   const apiMock = getApiMock();
-  const mockStoreCreator = getMockStore();
+  const mockStoreCreator = getMockStoreCreator();
   let store: ReturnType<typeof mockStoreCreator>;
 
   beforeEach(() => {

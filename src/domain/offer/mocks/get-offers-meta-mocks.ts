@@ -31,7 +31,7 @@ export function getOffersMetaMocks(): OfferMeta[] {
         longitude: 0,
         zoom: 30,
       },
-      isFavorite: false,
+      isFavorite: true,
       isPremium: false,
       rating: 2,
       city: citiesMocks.Paris,

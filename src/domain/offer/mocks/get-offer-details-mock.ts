@@ -2,7 +2,7 @@ import citiesMocks from '../../city/mocks/cities-mocks';
 import { getUserMock } from '../../user/mocks/get-user-mock';
 import { OfferDetails } from '../types';
 
-export function getOfferDetails(): OfferDetails {
+export function getOfferDetailsMock(): OfferDetails {
   return {
     id: '0',
     title: 'Offer',
@@ -23,7 +23,7 @@ export function getOfferDetails(): OfferDetails {
     host: getUserMock(),
     images: [
       'https://placehold.jp/150x150.png',
-      'https://placehold.jp/150x150.png',
+      'https://placehold.jp/3d4070/ffffff/150x150.png',
     ],
     maxAdults: 10,
   };

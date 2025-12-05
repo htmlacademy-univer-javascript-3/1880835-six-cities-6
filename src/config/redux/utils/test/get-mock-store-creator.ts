@@ -4,7 +4,7 @@ import { PayloadAction } from '@reduxjs/toolkit';
 import thunk from 'redux-thunk';
 import { api } from '../../../axios';
 
-export function getMockStore() {
+export function getMockStoreCreator() {
   return configureMockStore<State, PayloadAction<unknown, string>, AppDispatch>(
     [thunk.withExtraArgument({ api })]
   );

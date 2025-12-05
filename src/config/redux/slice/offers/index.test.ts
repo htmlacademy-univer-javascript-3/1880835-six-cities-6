@@ -6,25 +6,25 @@ import {
   offerThunk,
   removeOfferFromFavoritesThunk,
 } from '.';
-import { emptyState } from './state';
+import { getEmptyState } from './state';
 import { ENDPOINTS } from '../../../axios';
 import HTTP_STATUS from '../../../axios/constants/HTTP_STATUS';
 import { getOffersMetaMocks } from '../../../../domain/offer/mocks/get-offers-meta-mocks';
-import { getOfferDetails } from '../../../../domain/offer/mocks/get-offer-details';
+import { getOfferDetailsMock } from '../../../../domain/offer/mocks/get-offer-details-mock';
 import { expectFulfilledThunkValue } from '../../utils/test';
 import { OfferMeta } from '../../../../domain/offer';
 import { getApiMock } from '../../../axios/utils/test';
-import { getMockStore } from '../../utils/test';
+import { getMockStoreCreator } from '../../utils/test';
 import { getAuthMock } from '../../../../domain/auth/mock/get-auth-mock';
 import { getFulfilledState } from '../../thunk';
 
 describe('offers slice', () => {
   const apiMock = getApiMock();
-  const mockStoreCreator = getMockStore();
+  const mockStoreCreator = getMockStoreCreator();
   let store: ReturnType<typeof mockStoreCreator>;
 
   beforeEach(() => {
-    store = mockStoreCreator({ offers: emptyState() });
+    store = mockStoreCreator({ offers: getEmptyState() });
   });
 
   describe('offers thunk', () => {
@@ -42,7 +42,7 @@ describe('offers slice', () => {
 
   describe('offer thunk', () => {
     test('should fetch offer on fulfilled', async () => {
-      const offer = getOfferDetails();
+      const offer = getOfferDetailsMock();
       apiMock.onGet(ENDPOINTS.offer(offer.id)).replyOnce(HTTP_STATUS.ok, offer);
       await store.dispatch(offerThunk(offer.id));
       expectFulfilledThunkValue({
@@ -72,7 +72,7 @@ describe('offers slice', () => {
   describe('favorite offers thunk', () => {
     test('should fetch favorite offers on fulfilled', async () => {
       const storeWithAuth = mockStoreCreator({
-        offers: emptyState(),
+        offers: getEmptyState(),
         auth: { status: true, auth: getFulfilledState(getAuthMock()) },
       });
       const favoriteOffers = getOffersMetaMocks();

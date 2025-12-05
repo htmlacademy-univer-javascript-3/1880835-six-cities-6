@@ -21,7 +21,7 @@ export function Favorites() {
   }
 
   return (
-    <div className="page">
+    <div className="page" data-testid="favorites-page">
       <Header />
       <main className="page__main page__main--favorites">
         <div className="page__favorites-container container">
